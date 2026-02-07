@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Teaching Jobs - ESL Connect</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Navigation */
+        .nav-header {
+            position: sticky;
+            top: 0;
+            background: rgba(30, 0, 75, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: var(--spacing-2xl) var(--spacing-md);
+            text-align: center;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+
+        .page-header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: var(--spacing-sm);
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+        }
+
+        /* Search and Filter Section */
+        .search-filter-section {
+            padding: var(--spacing-xl) var(--spacing-md);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .search-bar {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-full);
+            color: #ffffff;
+            font-size: 1rem;
+            font-family: var(--font-primary);
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.2rem;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xs);
+        }
+
+        .filter-group label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .filter-group select {
+            padding: 0.75rem 2.5rem 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-sm);
+            color: #ffffff;
+            font-size: 0.95rem;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            transition: all 0.3s ease;
+        }
+
+        .filter-group select:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+
+        /* Results Header */
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+            padding: 0 var(--spacing-md);
+        }
+
+        .results-count {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: var(--spacing-xs);
+        }
+
+        .view-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-sm);
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn.active {
+            background: var(--primary-gradient);
+            border-color: var(--accent-blue);
+            color: #ffffff;
+        }
+
+        /* Job Listings */
+        .jobs-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-md) var(--spacing-2xl);
+        }
+
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .job-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .job-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .company-name {
+            color: var(--accent-blue);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .job-badge {
+            padding: 0.25rem 0.75rem;
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid var(--accent-blue);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+
+        .job-details {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .job-detail-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .job-detail-icon {
+            width: 20px;
+            text-align: center;
+        }
+
+        .job-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: var(--spacing-md);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .job-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: var(--spacing-md);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .job-salary {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--light-purple);
+        }
+
+        .btn-apply {
+            padding: 0.6rem 1.5rem;
+            background: var(--primary-gradient);
+            color: #ffffff;
+            border: none;
+            border-radius: var(--radius-full);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-apply:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-2xl);
+        }
+
+        .page-btn {
+            padding: 0.6rem 1rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-sm);
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .page-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .page-btn.active {
+            background: var(--primary-gradient);
+            border-color: var(--accent-blue);
+            color: #ffffff;
+        }
+
+        @media (max-width: 768px) {
+            .jobs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .results-header {
+                flex-direction: column;
+                gap: var(--spacing-md);
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="nav-header">
+        <div class="container"
+            style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem;">
+            <a href="index.html" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none;">
+                <img src="logo.svg" alt="ESL Connect" style="width: 40px; height: 40px;">
+                <span style="color: white; font-weight: 600; font-size: 1.1rem;">ESL Connect</span>
+            </a>
+            <div class="nav-buttons" style="display: flex; gap: 1rem;">
+                <a href="login.html" class="btn"
+                    style="padding: 0.6rem 1.5rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); border-radius: 50px; color: white; text-decoration: none; font-size: 0.95rem;">Sign
+                    In</a>
+                <a href="signup.html" class="btn btn-primary"
+                    style="padding: 0.6rem 1.5rem; border-radius: 50px; font-size: 0.95rem;">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>Browse Teaching Jobs</h1>
+        <p>Find your perfect teaching position in East Asia</p>
+    </div>
+
+    <!-- Search and Filters -->
+    <div class="search-filter-section">
+        <div class="search-bar">
+            <div class="search-input-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" id="searchInput"
+                    placeholder="Search by job title, school, or location...">
+            </div>
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label for="countryFilter">Country</label>
+                <select id="countryFilter">
+                    <option value="">All Countries</option>
+                    <option value="korea">🇰🇷 South Korea</option>
+                    <option value="japan">🇯🇵 Japan</option>
+                    <option value="china">🇨🇳 China</option>
+                    <option value="taiwan">🇹🇼 Taiwan</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="salaryFilter">Salary Range</label>
+                <select id="salaryFilter">
+                    <option value="">All Salaries</option>
+                    <option value="1500-2000">$1,500 - $2,000</option>
+                    <option value="2000-2500">$2,000 - $2,500</option>
+                    <option value="2500-3000">$2,500 - $3,000</option>
+                    <option value="3000+">$3,000+</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="typeFilter">Job Type</label>
+                <select id="typeFilter">
+                    <option value="">All Types</option>
+                    <option value="full-time">Full-time</option>
+                    <option value="part-time">Part-time</option>
+                    <option value="contract">Contract</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Header -->
+    <div class="jobs-container">
+        <div class="results-header">
+            <div class="results-count" id="resultsCount">Showing 12 jobs</div>
+        </div>
+
+        <!-- Job Listings Grid -->
+        <div class="jobs-grid" id="jobsGrid">
+            <!-- Job cards will be populated here by JavaScript -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <button class="page-btn">← Previous</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">Next →</button>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Sample job data (in production, this would come from API)
+        const sampleJobs = [
+            {
+                id: 1,
+                title: "Elementary English Teacher",
+                company: "Seoul International Academy",
+                location: "Seoul, South Korea",
+                country: "korea",
+                salary: "$2,200 - $2,500/month",
+                salaryRange: "2000-2500",
+                type: "full-time",
+                badge: "Featured",
+                description: "Seeking enthusiastic elementary English teacher for our international school. Experience with young learners preferred. Housing and flight allowance provided.",
+                requirements: ["Bachelor's Degree", "TEFL/TESOL", "Native Speaker"],
+                posted: "2 days ago"
+            },
+            {
+                id: 2,
+                title: "High School ESL Instructor",
+                company: "Tokyo English Academy",
+                location: "Tokyo, Japan",
+                country: "japan",
+                salary: "$2,800 - $3,200/month",
+                salaryRange: "2500-3000",
+                type: "full-time",
+                badge: "New",
+                description: "Join our prestigious high school teaching advanced English to motivated students. Competitive salary with benefits package including housing assistance.",
+                requirements: ["Master's Degree Preferred", "2+ years experience", "TESOL Certified"],
+                posted: "1 day ago"
+            },
+            {
+                id: 3,
+                title: "Business English Trainer",
+                company: "Shanghai Corporate Language Center",
+                location: "Shanghai, China",
+                country: "china",
+                salary: "$3,000 - $3,500/month",
+                salaryRange: "3000+",
+                type: "full-time",
+                badge: "Urgent",
+                description: "Experienced business English trainer needed for corporate clients. Flexible schedule, professional development opportunities, and excellent benefits.",
+                requirements: ["Business Background", "TEFL Certified", "3+ years experience"],
+                posted: "3 hours ago"
+            },
+            {
+                id: 4,
+                title: "Kindergarten English Teacher",
+                company: "Taipei Kids Academy",
+                location: "Taipei, Taiwan",
+                country: "taiwan",
+                salary: "$1,800 - $2,100/month",
+                salaryRange: "1500-2000",
+                type: "full-time",
+                badge: "",
+                description: "Fun and energetic kindergarten teacher wanted! Work with adorable kids aged 3-6. Small class sizes and supportive environment.",
+                requirements: ["Love working with kids", "TEFL/TESOL", "Patient and creative"],
+                posted: "5 days ago"
+            },
+            {
+                id: 5,
+                title: "Part-time Conversation Teacher",
+                company: "Osaka Language School",
+                location: "Osaka, Japan",
+                country: "japan",
+                salary: "$25 - $35/hour",
+                salaryRange: "2000-2500",
+                type: "part-time",
+                badge: "",
+                description: "Flexible part-time position teaching conversation classes to adults. Evening and weekend availability required.",
+                requirements: ["Native Speaker", "Conversational skills", "Flexible schedule"],
+                posted: "1 week ago"
+            },
+            {
+                id: 6,
+                title: "University English Lecturer",
+                company: "Busan National University",
+                location: "Busan, South Korea",
+                country: "korea",
+                salary: "$2,600 - $3,000/month",
+                salaryRange: "2500-3000",
+                type: "contract",
+                badge: "Featured",
+                description: "1-year contract position teaching English composition and literature to university students. Research opportunities available.",
+                requirements: ["Master's Degree Required", "University teaching experience", "Published work preferred"],
+                posted: "4 days ago"
+            },
+            {
+                id: 7,
+                title: "Online English Tutor",
+                company: "Beijing Online Education",
+                location: "Remote (China-based)",
+                country: "china",
+                salary: "$20 - $30/hour",
+                salaryRange: "2000-2500",
+                type: "part-time",
+                badge: "",
+                description: "Teach English online to Chinese students from the comfort of your home. Flexible hours, stable internet required.",
+                requirements: ["TEFL Certified", "Reliable internet", "Teaching experience"],
+                posted: "2 days ago"
+            },
+            {
+                id: 8,
+                title: "Middle School English Teacher",
+                company: "Kaohsiung International School",
+                location: "Kaohsiung, Taiwan",
+                country: "taiwan",
+                salary: "$2,300 - $2,700/month",
+                salaryRange: "2000-2500",
+                type: "full-time",
+                badge: "New",
+                description: "Teach English to grades 6-9 in a modern international school. Collaborative teaching environment with professional development.",
+                requirements: ["Bachelor's in Education", "TESOL/TEFL", "2+ years experience"],
+                posted: "1 day ago"
+            },
+            {
+                id: 9,
+                title: "IELTS Preparation Instructor",
+                company: "Seoul Test Prep Center",
+                location: "Seoul, South Korea",
+                country: "korea",
+                salary: "$2,400 - $2,800/month",
+                salaryRange: "2000-2500",
+                type: "full-time",
+                badge: "",
+                description: "Specialized IELTS instructor needed. Experience with test preparation and high scores required. Performance bonuses available.",
+                requirements: ["IELTS score 8.0+", "Test prep experience", "TEFL Certified"],
+                posted: "6 days ago"
+            },
+            {
+                id: 10,
+                title: "Adult Conversation Teacher",
+                company: "Kyoto Language Institute",
+                location: "Kyoto, Japan",
+                country: "japan",
+                salary: "$2,500 - $2,900/month",
+                salaryRange: "2500-3000",
+                type: "full-time",
+                badge: "",
+                description: "Teach conversation classes to adult learners in beautiful Kyoto. Cultural exchange opportunities and language support provided.",
+                requirements: ["Native Speaker", "TEFL/TESOL", "Cultural sensitivity"],
+                posted: "3 days ago"
+            },
+            {
+                id: 11,
+                title: "Corporate English Trainer",
+                company: "Guangzhou Business Institute",
+                location: "Guangzhou, China",
+                country: "china",
+                salary: "$3,200 - $3,800/month",
+                salaryRange: "3000+",
+                type: "full-time",
+                badge: "Featured",
+                description: "Train business professionals in English communication. Premium salary, modern facilities, and career advancement opportunities.",
+                requirements: ["Business English expertise", "5+ years experience", "Professional demeanor"],
+                posted: "2 days ago"
+            },
+            {
+                id: 12,
+                title: "Summer Camp English Coordinator",
+                company: "Taipei Summer Programs",
+                location: "Taipei, Taiwan",
+                country: "taiwan",
+                salary: "$2,000 - $2,400/month",
+                salaryRange: "2000-2500",
+                type: "contract",
+                badge: "Seasonal",
+                description: "3-month summer position coordinating English immersion camp. Fun, energetic environment with outdoor activities.",
+                requirements: ["Camp experience", "Energetic personality", "TEFL Certified"],
+                posted: "1 week ago"
+            }
+        ];
+
+        let filteredJobs = [...sampleJobs];
+
+        // Render jobs
+        function renderJobs(jobs) {
+            const jobsGrid = document.getElementById('jobsGrid');
+            const resultsCount = document.getElementById('resultsCount');
+
+            resultsCount.textContent = `Showing ${jobs.length} job${jobs.length !== 1 ? 's' : ''}`;
+
+            jobsGrid.innerHTML = jobs.map(job => `
+                <div class="job-card" onclick="viewJob(${job.id})">
+                    <div class="job-header">
+                        <div>
+                            <h3 class="job-title">${job.title}</h3>
+                            <div class="company-name">${job.company}</div>
+                        </div>
+                        ${job.badge ? `<span class="job-badge">${job.badge}</span>` : ''}
+                    </div>
+                    
+                    <div class="job-details">
+                        <div class="job-detail-item">
+                            <span class="job-detail-icon">📍</span>
+                            <span>${job.location}</span>
+                        </div>
+                        <div class="job-detail-item">
+                            <span class="job-detail-icon">💼</span>
+                            <span>${job.type.charAt(0).toUpperCase() + job.type.slice(1)}</span>
+                        </div>
+                        <div class="job-detail-item">
+                            <span class="job-detail-icon">🕒</span>
+                            <span>Posted ${job.posted}</span>
+                        </div>
+                    </div>
+                    
+                    <p class="job-description">${job.description}</p>
+                    
+                    <div class="job-footer">
+                        <div class="job-salary">${job.salary}</div>
+                        <button class="btn-apply" onclick="applyJob(event, ${job.id})">Apply Now</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter jobs
+        function filterJobs() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const country = document.getElementById('countryFilter').value;
+            const salary = document.getElementById('salaryFilter').value;
+            const type = document.getElementById('typeFilter').value;
+
+            filteredJobs = sampleJobs.filter(job => {
+                const matchesSearch = !searchTerm ||
+                    job.title.toLowerCase().includes(searchTerm) ||
+                    job.company.toLowerCase().includes(searchTerm) ||
+                    job.location.toLowerCase().includes(searchTerm);
+
+                const matchesCountry = !country || job.country === country;
+                const matchesSalary = !salary || job.salaryRange === salary;
+                const matchesType = !type || job.type === type;
+
+                return matchesSearch && matchesCountry && matchesSalary && matchesType;
+            });
+
+            renderJobs(filteredJobs);
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', filterJobs);
+        document.getElementById('countryFilter').addEventListener('change', filterJobs);
+        document.getElementById('salaryFilter').addEventListener('change', filterJobs);
+        document.getElementById('typeFilter').addEventListener('change', filterJobs);
+
+        // View job details
+        function viewJob(jobId) {
+            window.location.href = `job-detail.html?id=${jobId}`;
+        }
+
+        // Apply for job
+        function applyJob(event, jobId) {
+            event.stopPropagation();
+
+            // Check if user is logged in
+            const user = JSON.parse(localStorage.getItem('eslconnect_user') || '{}');
+
+            if (!user.loggedIn) {
+                alert('Please sign in to apply for jobs');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            console.log('Applying for job:', jobId);
+            alert('Application submitted! (This is a demo - in production, this would submit your application)');
+        }
+
+        // Initial render
+        renderJobs(filteredJobs);
+    </script>
+</body>
+
+</html>

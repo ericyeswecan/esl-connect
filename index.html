@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESL Connect - Your Gateway to Teaching in East Asia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="nav-header">
+        <div class="container"
+            style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem;">
+            <a href="index.html" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none;">
+                <img src="logo.svg" alt="ESL Connect" style="width: 40px; height: 40px;">
+                <span style="color: white; font-weight: 600; font-size: 1.1rem;">ESL Connect</span>
+            </a>
+            <div class="nav-buttons" style="display: flex; gap: 1rem;">
+                <a href="login.html" class="btn"
+                    style="padding: 0.6rem 1.5rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); border-radius: 50px; color: white; text-decoration: none; font-size: 0.95rem; transition: all 0.3s ease;">Sign
+                    In</a>
+                <a href="signup.html" class="btn btn-primary"
+                    style="padding: 0.6rem 1.5rem; border-radius: 50px; font-size: 0.95rem;">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container">
+            <img src="logo.svg" alt="ESL Connect Logo" class="logo">
+            <h1>ESL Connect</h1>
+            <p class="tagline">Your Gateway to Teaching Opportunities in East Asia</p>
+            <p class="welcome-text">
+                Welcome to ESL Connect! We connect qualified English teachers with premier teaching opportunities
+                across Korea, Japan, China, and Taiwan. Whether you're seeking your first teaching position abroad
+                or looking to hire experienced educators, you've come to the right place.
+            </p>
+        </div>
+    </header>
+
+    <!-- Featured Resources -->
+    <main class="main-content">
+        <div class="container">
+            <h2 class="section-title">Get Started</h2>
+
+            <div class="featured-grid">
+                <!-- For Teachers -->
+                <div class="feature-card">
+                    <div class="card-icon">👨‍🏫</div>
+                    <h3>Find a Job</h3>
+                    <p>Browse teaching positions across East Asia. Filter by country, salary, and requirements.</p>
+                    <a href="jobs.html" class="btn btn-primary">Search Jobs</a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="card-icon">📄</div>
+                    <h3>Post Your Resume</h3>
+                    <p>Let employers find you. Create a profile and get recruited for positions that match your skills.
+                    </p>
+                    <a href="post-resume.html" class="btn btn-primary">Submit Resume</a>
+                </div>
+
+                <!-- For Employers -->
+                <div class="feature-card">
+                    <div class="card-icon">💼</div>
+                    <h3>Post a Job</h3>
+                    <p>Reach thousands of qualified teachers. Post your position and find the perfect candidate.</p>
+                    <a href="post-job.html" class="btn btn-primary">Post Position</a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="card-icon">🔍</div>
+                    <h3>Find Teachers</h3>
+                    <p>Search our database of qualified educators ready to teach in your institution.</p>
+                    <a href="resumes.html" class="btn btn-primary">Browse Resumes</a>
+                </div>
+
+                <!-- Community & Resources -->
+                <div class="feature-card">
+                    <div class="card-icon">💬</div>
+                    <h3>Community Forums</h3>
+                    <p>Connect with other teachers. Share experiences, ask questions, and get advice.</p>
+                    <a href="#forums" class="btn btn-primary">Join Discussion</a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="card-icon">📚</div>
+                    <h3>Resources</h3>
+                    <p>Access teaching materials, visa guides, and country-specific information.</p>
+                    <a href="#resources" class="btn btn-primary">Explore Resources</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Country-Specific Job Boards -->
+    <section class="country-section">
+        <div class="container">
+            <h2 class="section-title">Jobs by Country</h2>
+            <p class="section-subtitle">Find teaching opportunities in your preferred destination</p>
+
+            <div class="country-grid">
+                <a href="#korea-jobs" class="country-card">
+                    <div class="country-flag">🇰🇷</div>
+                    <h3>South Korea</h3>
+                    <p class="job-count">View available positions</p>
+                </a>
+
+                <a href="#japan-jobs" class="country-card">
+                    <div class="country-flag">🇯🇵</div>
+                    <h3>Japan</h3>
+                    <p class="job-count">View available positions</p>
+                </a>
+
+                <a href="#china-jobs" class="country-card">
+                    <div class="country-flag">🇨🇳</div>
+                    <h3>China</h3>
+                    <p class="job-count">View available positions</p>
+                </a>
+
+                <a href="#taiwan-jobs" class="country-card">
+                    <div class="country-flag">🇹🇼</div>
+                    <h3>Taiwan</h3>
+                    <p class="job-count">View available positions</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Links -->
+    <section class="quick-links">
+        <div class="container">
+            <div class="links-grid">
+                <div class="links-column">
+                    <h4>For Teachers</h4>
+                    <ul>
+                        <li><a href="#job-board">International Job Board</a></li>
+                        <li><a href="#korea-jobs">Korea Jobs</a></li>
+                        <li><a href="#japan-jobs">Japan Jobs</a></li>
+                        <li><a href="#china-jobs">China Jobs</a></li>
+                        <li><a href="#taiwan-jobs">Taiwan Jobs</a></li>
+                        <li><a href="post-resume.html">Post Your Resume</a></li>
+                    </ul>
+                </div>
+
+                <div class="links-column">
+                    <h4>For Employers</h4>
+                    <ul>
+                        <li><a href="post-job.html">Post a Job</a></li>
+                        <li><a href="resumes.html">Browse Resumes</a></li>
+                        <li><a href="#advertise">Advertise with Us</a></li>
+                    </ul>
+                </div>
+
+                <div class="links-column">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#visa-guide">Visa Information</a></li>
+                        <li><a href="#teaching-tips">Teaching Tips</a></li>
+                        <li><a href="#country-guides">Country Guides</a></li>
+                        <li><a href="#certification">TEFL/TESOL Info</a></li>
+                    </ul>
+                </div>
+
+                <div class="links-column">
+                    <h4>Community</h4>
+                    <ul>
+                        <li><a href="#forums">Discussion Forums</a></li>
+                        <li><a href="#success-stories">Success Stories</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-tagline">Connecting Teachers and Opportunities Across East Asia</p>
+            <div class="footer-links">
+                <a href="#privacy">Privacy Policy</a>
+                <span class="separator">|</span>
+                <a href="#terms">Terms of Service</a>
+                <span class="separator">|</span>
+                <a href="#sitemap">Sitemap</a>
+            </div>
+            <p class="copyright">© 2026 ESL Connect. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

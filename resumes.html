@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find ESL Teachers - ESL Connect</title>
+    <meta name="description" content="Browse qualified ESL teacher profiles and resumes for your school">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Navigation */
+        .nav-header {
+            position: sticky;
+            top: 0;
+            background: rgba(30, 0, 75, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: var(--spacing-2xl) var(--spacing-md);
+            text-align: center;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+
+        .page-header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: var(--spacing-sm);
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+        }
+
+        /* Search and Filter Section */
+        .search-filter-section {
+            padding: var(--spacing-xl) var(--spacing-md);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .search-bar {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-full);
+            color: #ffffff;
+            font-size: 1rem;
+            font-family: var(--font-primary);
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.2rem;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xs);
+        }
+
+        .filter-group label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .filter-group select {
+            padding: 0.75rem 2.5rem 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-sm);
+            color: #ffffff;
+            font-size: 0.95rem;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            transition: all 0.3s ease;
+        }
+
+        .filter-group select:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+
+        /* Results Header */
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+            padding: 0 var(--spacing-md);
+        }
+
+        .results-count {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+        }
+
+        /* Teachers Container */
+        .teachers-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-md) var(--spacing-2xl);
+        }
+
+        .teachers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        /* Teacher Card */
+        .teacher-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .teacher-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .teacher-card.blurred .card-content {
+            filter: blur(5px);
+            pointer-events: none;
+        }
+
+        .teacher-card.blurred::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 12, 41, 0.7);
+            backdrop-filter: blur(2px);
+            z-index: 1;
+        }
+
+        .login-prompt {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            text-align: center;
+            padding: var(--spacing-lg);
+        }
+
+        .login-prompt-text {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .btn-login-prompt {
+            padding: 0.75rem 2rem;
+            background: var(--primary-gradient);
+            color: #ffffff;
+            border: none;
+            border-radius: var(--radius-full);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login-prompt:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.6);
+        }
+
+        .teacher-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--light-purple) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto var(--spacing-md);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .teacher-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .teacher-headline {
+            color: var(--accent-blue);
+            font-size: 0.95rem;
+            text-align: center;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .teacher-location {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            text-align: center;
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-xs);
+        }
+
+        .teacher-details {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .detail-icon {
+            width: 20px;
+            text-align: center;
+        }
+
+        .certifications {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-xs);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .cert-badge {
+            padding: 0.25rem 0.75rem;
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid var(--accent-blue);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+
+        .video-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            color: var(--light-purple);
+            font-size: 0.85rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .availability-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4caf50;
+            border-radius: var(--radius-full);
+            color: #4caf50;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .btn-view-profile {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--primary-gradient);
+            color: #ffffff;
+            border: none;
+            border-radius: var(--radius-full);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-view-profile:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .teachers-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .results-header {
+                flex-direction: column;
+                gap: var(--spacing-md);
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="nav-header">
+        <div class="container"
+            style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem;">
+            <a href="index.html" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none;">
+                <img src="logo.svg" alt="ESL Connect" style="width: 40px; height: 40px;">
+                <span style="color: white; font-weight: 600; font-size: 1.1rem;">ESL Connect</span>
+            </a>
+            <div class="nav-buttons" style="display: flex; gap: 1rem;">
+                <a href="login.html" class="btn"
+                    style="padding: 0.6rem 1.5rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); border-radius: 50px; color: white; text-decoration: none; font-size: 0.95rem;">Sign
+                    In</a>
+                <a href="signup.html" class="btn btn-primary"
+                    style="padding: 0.6rem 1.5rem; border-radius: 50px; font-size: 0.95rem;">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>Find Qualified ESL Teachers</h1>
+        <p>Browse experienced teachers ready for your school</p>
+    </div>
+
+    <!-- Search and Filters -->
+    <div class="search-filter-section">
+        <div class="search-bar">
+            <div class="search-input-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" id="searchInput"
+                    placeholder="Search by name, skills, or qualifications...">
+            </div>
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label for="countryFilter">Country Preference</label>
+                <select id="countryFilter">
+                    <option value="">All Countries</option>
+                    <option value="korea">🇰🇷 South Korea</option>
+                    <option value="japan">🇯🇵 Japan</option>
+                    <option value="china">🇨🇳 China</option>
+                    <option value="taiwan">🇹🇼 Taiwan</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="experienceFilter">Experience Level</label>
+                <select id="experienceFilter">
+                    <option value="">All Levels</option>
+                    <option value="entry">Entry Level</option>
+                    <option value="1-3">1-3 years</option>
+                    <option value="3-5">3-5 years</option>
+                    <option value="5+">5+ years</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="certFilter">Certifications</label>
+                <select id="certFilter">
+                    <option value="">All Certifications</option>
+                    <option value="TEFL">TEFL</option>
+                    <option value="TESOL">TESOL</option>
+                    <option value="CELTA">CELTA</option>
+                    <option value="BA Education">BA Education</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Header -->
+    <div class="teachers-container">
+        <div class="results-header">
+            <div class="results-count" id="resultsCount">Showing 12 teachers</div>
+        </div>
+
+        <!-- Teachers Grid -->
+        <div class="teachers-grid" id="teachersGrid">
+            <!-- Teacher cards will be populated here by JavaScript -->
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Sample teacher data
+        const sampleTeachers = [
+            {
+                id: 1,
+                name: "Sarah Johnson",
+                photo: "👩‍🏫",
+                headline: "Experienced Elementary ESL Teacher",
+                location: "Currently in Seoul, South Korea",
+                countryPreference: ["korea", "japan"],
+                experience: "5+",
+                experienceYears: 6,
+                certifications: ["TEFL", "TESOL", "BA Education"],
+                skills: ["Young Learners", "Phonics", "Classroom Management"],
+                bio: "Passionate educator with 6 years of experience teaching elementary students in East Asia.",
+                availability: "Available",
+                hasVideo: true
+            },
+            {
+                id: 2,
+                name: "Michael Chen",
+                photo: "👨‍🏫",
+                headline: "Business English Specialist",
+                location: "Based in Tokyo, Japan",
+                countryPreference: ["japan", "korea"],
+                experience: "5+",
+                experienceYears: 8,
+                certifications: ["TESOL", "CELTA", "MBA"],
+                skills: ["Business English", "Corporate Training", "TOEIC Prep"],
+                bio: "MBA holder with extensive experience training business professionals.",
+                availability: "Available",
+                hasVideo: true
+            },
+            {
+                id: 3,
+                name: "Emily Rodriguez",
+                photo: "👩‍🏫",
+                headline: "IELTS & TOEFL Preparation Expert",
+                location: "Shanghai, China",
+                countryPreference: ["china", "taiwan"],
+                experience: "3-5",
+                experienceYears: 4,
+                certifications: ["TEFL", "TESOL"],
+                skills: ["IELTS", "TOEFL", "Test Preparation"],
+                bio: "Specialized in helping students achieve high scores on standardized tests.",
+                availability: "Available",
+                hasVideo: false
+            },
+            {
+                id: 4,
+                name: "David Kim",
+                photo: "👨‍🏫",
+                headline: "University English Lecturer",
+                location: "Busan, South Korea",
+                countryPreference: ["korea"],
+                experience: "5+",
+                experienceYears: 10,
+                certifications: ["MA TESOL", "BA Education", "CELTA"],
+                skills: ["Academic English", "Research", "Literature"],
+                bio: "PhD candidate with 10 years of university teaching experience.",
+                availability: "Available from March",
+                hasVideo: true
+            },
+            {
+                id: 5,
+                name: "Jennifer Lee",
+                photo: "👩‍🏫",
+                headline: "Kindergarten & Early Childhood Specialist",
+                location: "Taipei, Taiwan",
+                countryPreference: ["taiwan", "korea"],
+                experience: "3-5",
+                experienceYears: 5,
+                certifications: ["TEFL", "Early Childhood Education"],
+                skills: ["Young Learners", "TPR", "Songs & Games"],
+                bio: "Energetic teacher who loves working with young children aged 3-6.",
+                availability: "Available",
+                hasVideo: true
+            },
+            {
+                id: 6,
+                name: "Robert Taylor",
+                photo: "👨‍🏫",
+                headline: "High School ESL Teacher",
+                location: "Osaka, Japan",
+                countryPreference: ["japan", "korea"],
+                experience: "1-3",
+                experienceYears: 2,
+                certifications: ["TEFL", "BA English Literature"],
+                skills: ["High School", "Literature", "Writing"],
+                bio: "Recent graduate passionate about teaching literature and writing.",
+                availability: "Available",
+                hasVideo: false
+            },
+            {
+                id: 7,
+                name: "Amanda White",
+                photo: "👩‍🏫",
+                headline: "Conversation & Pronunciation Coach",
+                location: "Beijing, China",
+                countryPreference: ["china"],
+                experience: "5+",
+                experienceYears: 7,
+                certifications: ["TESOL", "Pronunciation Specialist"],
+                skills: ["Conversation", "Pronunciation", "Adult Learners"],
+                bio: "Specialized in helping students improve fluency and pronunciation.",
+                availability: "Available",
+                hasVideo: true
+            },
+            {
+                id: 8,
+                name: "James Wilson",
+                photo: "👨‍🏫",
+                headline: "Online English Tutor",
+                location: "Remote (Korea-based)",
+                countryPreference: ["korea", "japan", "china", "taiwan"],
+                experience: "3-5",
+                experienceYears: 4,
+                certifications: ["TEFL", "TESOL"],
+                skills: ["Online Teaching", "One-on-One", "Flexible Schedule"],
+                bio: "Experienced online tutor available for remote teaching positions.",
+                availability: "Available",
+                hasVideo: true
+            },
+            {
+                id: 9,
+                name: "Lisa Anderson",
+                photo: "👩‍🏫",
+                headline: "Middle School English Teacher",
+                location: "Kaohsiung, Taiwan",
+                countryPreference: ["taiwan"],
+                experience: "1-3",
+                experienceYears: 3,
+                certifications: ["TEFL", "BA Education"],
+                skills: ["Middle School", "Grammar", "Reading Comprehension"],
+                bio: "Dedicated teacher with a focus on building strong foundational skills.",
+                availability: "Available from June",
+                hasVideo: false
+            },
+            {
+                id: 10,
+                name: "Thomas Brown",
+                photo: "👨‍🏫",
+                headline: "Academic Writing Instructor",
+                location: "Seoul, South Korea",
+                countryPreference: ["korea", "japan"],
+                experience: "5+",
+                experienceYears: 9,
+                certifications: ["MA English", "TESOL", "CELTA"],
+                skills: ["Academic Writing", "Essay Writing", "Research Papers"],
+                bio: "Master's degree holder specializing in academic writing instruction.",
+                availability: "Available",
+                hasVideo: true
+            },
+            {
+                id: 11,
+                name: "Rachel Martinez",
+                photo: "👩‍🏫",
+                headline: "ESL Curriculum Developer",
+                location: "Guangzhou, China",
+                countryPreference: ["china", "taiwan"],
+                experience: "5+",
+                experienceYears: 11,
+                certifications: ["MA TESOL", "Curriculum Design"],
+                skills: ["Curriculum Development", "Teacher Training", "Materials Design"],
+                bio: "Experienced in developing ESL curricula and training teachers.",
+                availability: "Available",
+                hasVideo: true
+            },
+            {
+                id: 12,
+                name: "Kevin Park",
+                photo: "👨‍🏫",
+                headline: "Summer Camp Coordinator",
+                location: "Jeju, South Korea",
+                countryPreference: ["korea"],
+                experience: "1-3",
+                experienceYears: 2,
+                certifications: ["TEFL", "Camp Leadership"],
+                skills: ["Summer Camps", "Outdoor Activities", "Group Management"],
+                bio: "Energetic coordinator with experience running English immersion camps.",
+                availability: "Seasonal (Summer)",
+                hasVideo: false
+            }
+        ];
+
+        let filteredTeachers = [...sampleTeachers];
+
+        // Check if user is logged in
+        function isLoggedIn() {
+            const user = JSON.parse(localStorage.getItem('eslconnect_user') || '{}');
+            return user.loggedIn === true;
+        }
+
+        // Render teachers
+        function renderTeachers(teachers) {
+            const teachersGrid = document.getElementById('teachersGrid');
+            const resultsCount = document.getElementById('resultsCount');
+            const loggedIn = isLoggedIn();
+
+            resultsCount.textContent = `Showing ${teachers.length} teacher${teachers.length !== 1 ? 's' : ''}`;
+
+            teachersGrid.innerHTML = teachers.map(teacher => `
+                <div class="teacher-card ${!loggedIn ? 'blurred' : ''}" onclick="viewTeacher(${teacher.id})">
+                    ${!loggedIn ? `
+                        <div class="login-prompt">
+                            <div class="login-prompt-text">Sign in to view full profiles</div>
+                            <button class="btn-login-prompt" onclick="event.stopPropagation(); window.location.href='login.html'">Sign In</button>
+                        </div>
+                    ` : ''}
+                    <div class="card-content">
+                        <div class="teacher-photo">${teacher.photo}</div>
+                        <h3 class="teacher-name">${teacher.name}</h3>
+                        <div class="teacher-headline">${teacher.headline}</div>
+                        <div class="teacher-location">
+                            <span>📍</span>
+                            <span>${teacher.location}</span>
+                        </div>
+                        
+                        <div class="teacher-details">
+                            <div class="detail-item">
+                                <span class="detail-icon">💼</span>
+                                <span>${teacher.experienceYears} years experience</span>
+                            </div>
+                            ${teacher.hasVideo ? `
+                                <div class="detail-item video-indicator">
+                                    <span>🎥</span>
+                                    <span>Video introduction available</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                        
+                        <div class="certifications">
+                            ${teacher.certifications.slice(0, 3).map(cert => `
+                                <span class="cert-badge">${cert}</span>
+                            `).join('')}
+                        </div>
+                        
+                        <center>
+                            <span class="availability-badge">${teacher.availability}</span>
+                        </center>
+                        
+                        <button class="btn-view-profile">View Full Profile</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter teachers
+        function filterTeachers() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const country = document.getElementById('countryFilter').value;
+            const experience = document.getElementById('experienceFilter').value;
+            const cert = document.getElementById('certFilter').value;
+
+            filteredTeachers = sampleTeachers.filter(teacher => {
+                const matchesSearch = !searchTerm ||
+                    teacher.name.toLowerCase().includes(searchTerm) ||
+                    teacher.headline.toLowerCase().includes(searchTerm) ||
+                    teacher.skills.some(skill => skill.toLowerCase().includes(searchTerm));
+
+                const matchesCountry = !country || teacher.countryPreference.includes(country);
+                const matchesExperience = !experience || teacher.experience === experience;
+                const matchesCert = !cert || teacher.certifications.includes(cert);
+
+                return matchesSearch && matchesCountry && matchesExperience && matchesCert;
+            });
+
+            renderTeachers(filteredTeachers);
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', filterTeachers);
+        document.getElementById('countryFilter').addEventListener('change', filterTeachers);
+        document.getElementById('experienceFilter').addEventListener('change', filterTeachers);
+        document.getElementById('certFilter').addEventListener('change', filterTeachers);
+
+        // View teacher profile
+        function viewTeacher(teacherId) {
+            if (!isLoggedIn()) {
+                return; // Login prompt will handle this
+            }
+            window.location.href = `teacher-profile.html?id=${teacherId}`;
+        }
+
+        // Initial render
+        renderTeachers(filteredTeachers);
+    </script>
+</body>
+
+</html>

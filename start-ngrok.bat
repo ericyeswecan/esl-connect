@@ -1,0 +1,2 @@
+@echo off
+"C:\Users\gthuy\AppData\Local\Microsoft\WinGet\Packages\Ngrok.Ngrok_Microsoft.Winget.Source_8wekyb3d8bbwe\ngrok.exe" http 8080

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post a Job - ESL Connect</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Form-specific styles */
+        .form-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: var(--spacing-xl) var(--spacing-md);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .form-header h1 {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            margin-bottom: var(--spacing-sm);
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .form-header p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.05rem;
+        }
+
+        .job-form {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+        }
+
+        .form-section {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .form-section h2 {
+            font-size: 1.25rem;
+            color: var(--accent-blue);
+            margin-bottom: var(--spacing-md);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .required {
+            color: #f5576c;
+            margin-left: 4px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-sm);
+            color: #ffffff;
+            font-size: 1rem;
+            font-family: var(--font-primary);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-group select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 2.5rem;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-md);
+        }
+
+        .helper-text {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: var(--spacing-xs);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-xl);
+        }
+
+        .btn-submit {
+            flex: 1;
+            padding: 1.125rem 2rem;
+            font-size: 1.125rem;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column-reverse;
+            }
+
+            .job-form {
+                padding: var(--spacing-lg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <div class="form-header">
+            <a href="index.html" style="text-decoration: none;">
+                <img src="logo.svg" alt="ESL Connect Logo" class="logo" style="width: 80px; margin-bottom: 1rem;">
+            </a>
+            <h1>Post a Teaching Position</h1>
+            <p>Find qualified English teachers for your institution</p>
+        </div>
+
+        <form class="job-form" id="jobPostingForm">
+            <!-- Company Information -->
+            <div class="form-section">
+                <h2>Company Information</h2>
+
+                <div class="form-group">
+                    <label for="companyName">Institution Name<span class="required">*</span></label>
+                    <input type="text" id="companyName" name="companyName" required
+                        placeholder="e.g., Seoul International Academy">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="country">Country<span class="required">*</span></label>
+                        <select id="country" name="country" required>
+                            <option value="">Select a country</option>
+                            <option value="korea">South Korea</option>
+                            <option value="japan">Japan</option>
+                            <option value="china">China</option>
+                            <option value="taiwan">Taiwan</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city">City<span class="required">*</span></label>
+                        <input type="text" id="city" name="city" required placeholder="e.g., Seoul">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="companyWebsite">Company Website</label>
+                    <input type="url" id="companyWebsite" name="companyWebsite" placeholder="https://www.example.com">
+                </div>
+            </div>
+
+            <!-- Job Details -->
+            <div class="form-section">
+                <h2>Job Details</h2>
+
+                <div class="form-group">
+                    <label for="jobTitle">Job Title<span class="required">*</span></label>
+                    <input type="text" id="jobTitle" name="jobTitle" required
+                        placeholder="e.g., Native English Teacher">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="jobType">Employment Type<span class="required">*</span></label>
+                        <select id="jobType" name="jobType" required>
+                            <option value="">Select type</option>
+                            <option value="fulltime">Full-time</option>
+                            <option value="parttime">Part-time</option>
+                            <option value="contract">Contract</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="salary">Monthly Salary (USD)<span class="required">*</span></label>
+                        <input type="text" id="salary" name="salary" required placeholder="e.g., 2000-2500">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="startDate">Preferred Start Date</label>
+                    <input type="date" id="startDate" name="startDate">
+                </div>
+
+                <div class="form-group">
+                    <label for="jobDescription">Job Description<span class="required">*</span></label>
+                    <textarea id="jobDescription" name="jobDescription" required
+                        placeholder="Describe the position, responsibilities, and what makes your institution a great place to work..."></textarea>
+                    <p class="helper-text">Include teaching hours, class sizes, and any special programs</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="requirements">Requirements<span class="required">*</span></label>
+                    <textarea id="requirements" name="requirements" required
+                        placeholder="List required qualifications, certifications, and experience..."></textarea>
+                    <p class="helper-text">e.g., Bachelor's degree, TEFL/TESOL certification, native English speaker</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="benefits">Benefits & Perks</label>
+                    <textarea id="benefits" name="benefits"
+                        placeholder="Housing allowance, flight reimbursement, health insurance, vacation days..."></textarea>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="form-section">
+                <h2>Contact Information</h2>
+
+                <div class="form-group">
+                    <label for="contactName">Contact Person<span class="required">*</span></label>
+                    <input type="text" id="contactName" name="contactName" required placeholder="Your name">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="contactEmail">Email<span class="required">*</span></label>
+                        <input type="email" id="contactEmail" name="contactEmail" required placeholder="hr@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactPhone">Phone Number</label>
+                        <input type="tel" id="contactPhone" name="contactPhone" placeholder="+82 10 1234 5678">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="applicationMethod">How to Apply<span class="required">*</span></label>
+                    <textarea id="applicationMethod" name="applicationMethod" required
+                        placeholder="Describe how candidates should apply (e.g., send resume to email, apply through website, etc.)"></textarea>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <a href="index.html" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary btn-submit">Post Job</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Form submission handler
+        document.getElementById('jobPostingForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            if (validateForm(this)) {
+                // Collect form data
+                const formData = new FormData(this);
+                const jobData = Object.fromEntries(formData.entries());
+
+                console.log('Job posting data:', jobData);
+
+                // Show success message (placeholder)
+                alert('Thank you! Your job posting has been submitted successfully. We will review it and publish it shortly.');
+
+                // In production, send data to server:
+                // fetch('/api/jobs', {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify(jobData)
+                // }).then(response => response.json())
+                //   .then(data => { ... });
+
+                // Redirect to home page
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            }
+        });
+    </script>
+</body>
+
+</html>

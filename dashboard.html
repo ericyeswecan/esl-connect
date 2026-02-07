@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard - ESL Connect</title>
+    <meta name="description" content="Manage your ESL Connect account">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: calc(100vh - 70px);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar */
+        .dashboard-sidebar {
+            background: rgba(255, 255, 255, 0.03);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: var(--spacing-xl);
+        }
+
+        .user-profile-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+            text-align: center;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--light-purple) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto var(--spacing-md);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .user-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .user-role {
+            color: var(--accent-blue);
+            font-size: 0.9rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .btn-edit-profile {
+            width: 100%;
+            padding: 0.6rem;
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid var(--accent-blue);
+            border-radius: var(--radius-full);
+            color: var(--accent-blue);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit-profile:hover {
+            background: rgba(102, 126, 234, 0.3);
+        }
+
+        /* Navigation Menu */
+        .dashboard-nav {
+            list-style: none;
+            padding: 0;
+        }
+
+        .nav-item {
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-md);
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(102, 126, 234, 0.2);
+            color: #ffffff;
+        }
+
+        .btn-logout {
+            width: 100%;
+            padding: var(--spacing-md);
+            background: rgba(255, 82, 82, 0.2);
+            border: 1px solid #ff5252;
+            border-radius: var(--radius-full);
+            color: #ff5252;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: var(--spacing-xl);
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255, 82, 82, 0.3);
+        }
+
+        /* Main Content */
+        .dashboard-content {
+            padding: var(--spacing-xl);
+            overflow-y: auto;
+        }
+
+        .dashboard-header {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .dashboard-title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .dashboard-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+        }
+
+        /* Section */
+        .dashboard-section {
+            display: none;
+        }
+
+        .dashboard-section.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        /* Job Cards */
+        .jobs-grid {
+            display: grid;
+            gap: var(--spacing-lg);
+        }
+
+        .job-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            transition: all 0.3s ease;
+        }
+
+        .job-card:hover {
+            border-color: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .job-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .job-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .job-company {
+            color: var(--accent-blue);
+            font-size: 0.95rem;
+        }
+
+        .job-meta {
+            display: flex;
+            gap: var(--spacing-lg);
+            flex-wrap: wrap;
+            margin-bottom: var(--spacing-md);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .job-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            padding: 0.6rem 1.25rem;
+            border-radius: var(--radius-full);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary-action {
+            background: var(--primary-gradient);
+            color: #ffffff;
+        }
+
+        .btn-primary-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary-action {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+        }
+
+        .btn-secondary-action:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-danger-action {
+            background: rgba(255, 82, 82, 0.2);
+            border: 1px solid #ff5252;
+            color: #ff5252;
+        }
+
+        .btn-danger-action:hover {
+            background: rgba(255, 82, 82, 0.3);
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 0.4rem 0.9rem;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.2);
+            border: 1px solid #ffc107;
+            color: #ffc107;
+        }
+
+        .status-reviewed {
+            background: rgba(33, 150, 243, 0.2);
+            border: 1px solid #2196f3;
+            color: #2196f3;
+        }
+
+        .status-accepted {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4caf50;
+            color: #4caf50;
+        }
+
+        .status-rejected {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid #f44336;
+            color: #f44336;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: var(--spacing-2xl);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .empty-state-text {
+            font-size: 1.1rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-sidebar {
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .dashboard-nav {
+                display: flex;
+                overflow-x: auto;
+                gap: var(--spacing-sm);
+            }
+
+            .nav-item {
+                margin-bottom: 0;
+            }
+
+            .nav-link {
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="nav-header"
+        style="position: sticky; top: 0; background: rgba(30, 0, 75, 0.95); backdrop-filter: blur(10px); z-index: 100; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+        <div class="container"
+            style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem;">
+            <a href="index.html" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none;">
+                <img src="logo.svg" alt="ESL Connect" style="width: 40px; height: 40px;">
+                <span style="color: white; font-weight: 600; font-size: 1.1rem;">ESL Connect</span>
+            </a>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <a href="jobs.html"
+                    style="color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.95rem;">Jobs</a>
+                <a href="resumes.html"
+                    style="color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.95rem;">Teachers</a>
+                <a href="dashboard.html"
+                    style="color: white; text-decoration: none; font-size: 0.95rem; font-weight: 600;">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar">
+            <div class="user-profile-card">
+                <div class="user-avatar" id="userAvatar">👤</div>
+                <div class="user-name" id="userName">Loading...</div>
+                <div class="user-role" id="userRole">Loading...</div>
+                <button class="btn-edit-profile" onclick="showSection('profile')">Edit Profile</button>
+            </div>
+
+            <nav>
+                <ul class="dashboard-nav" id="dashboardNav">
+                    <!-- Navigation will be populated by JavaScript based on role -->
+                </ul>
+            </nav>
+
+            <button class="btn-logout" onclick="logout()">Logout</button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-content">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title" id="dashboardTitle">Welcome Back!</h1>
+                <p class="dashboard-subtitle" id="dashboardSubtitle">Manage your account</p>
+            </div>
+
+            <!-- Teacher: Saved Jobs Section -->
+            <section id="savedJobs" class="dashboard-section">
+                <div class="section-header">
+                    <h2 class="section-title">Saved Jobs</h2>
+                </div>
+                <div class="jobs-grid" id="savedJobsGrid">
+                    <!-- Saved jobs will be populated here -->
+                </div>
+            </section>
+
+            <!-- Teacher: My Applications Section -->
+            <section id="applications" class="dashboard-section">
+                <div class="section-header">
+                    <h2 class="section-title">My Applications</h2>
+                </div>
+                <div class="jobs-grid" id="applicationsGrid">
+                    <!-- Applications will be populated here -->
+                </div>
+            </section>
+
+            <!-- Employer: My Job Posts Section -->
+            <section id="jobPosts" class="dashboard-section">
+                <div class="section-header">
+                    <h2 class="section-title">My Job Posts</h2>
+                    <a href="post-job.html" class="btn-action btn-primary-action">Post New Job</a>
+                </div>
+                <div class="jobs-grid" id="jobPostsGrid">
+                    <!-- Job posts will be populated here -->
+                </div>
+            </section>
+
+            <!-- Employer: Applicants Section -->
+            <section id="applicants" class="dashboard-section">
+                <div class="section-header">
+                    <h2 class="section-title">Applicants</h2>
+                </div>
+                <div class="jobs-grid" id="applicantsGrid">
+                    <!-- Applicants will be populated here -->
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile" class="dashboard-section">
+                <div class="section-header">
+                    <h2 class="section-title">My Profile</h2>
+                </div>
+                <div
+                    style="background: rgba(255, 255, 255, 0.05); padding: var(--spacing-xl); border-radius: var(--radius-lg); border: 1px solid rgba(255, 255, 255, 0.1);">
+                    <p style="color: rgba(255,255,255,0.8); text-align: center; padding: var(--spacing-xl);">
+                        Profile editing coming soon! (Demo mode)
+                    </p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Sample jobs data (same as jobs.html)
+        const sampleJobs = [
+            {
+                id: 1,
+                title: "Elementary English Teacher",
+                company: "Seoul International Academy",
+                location: "Seoul, South Korea",
+                salary: "$2,200 - $2,500/month",
+                type: "full-time",
+                posted: "2 days ago"
+            },
+            {
+                id: 2,
+                title: "High School ESL Instructor",
+                company: "Tokyo English Academy",
+                location: "Tokyo, Japan",
+                salary: "$2,800 - $3,200/month",
+                type: "full-time",
+                posted: "1 week ago"
+            },
+            {
+                id: 3,
+                title: "Business English Trainer",
+                company: "Shanghai Corporate Language Center",
+                location: "Shanghai, China",
+                salary: "$2,500 - $3,000/month",
+                type: "full-time",
+                posted: "3 days ago"
+            }
+        ];
+
+        // Check authentication
+        const user = JSON.parse(localStorage.getItem('eslconnect_user') || '{}');
+        if (!user.loggedIn) {
+            alert('Please sign in to access your dashboard');
+            window.location.href = 'login.html';
+        }
+
+        // Initialize dashboard
+        const userRole = user.role || 'teacher'; // Default to teacher
+        document.getElementById('userName').textContent = user.name || 'User';
+        document.getElementById('userRole').textContent = userRole.charAt(0).toUpperCase() + userRole.slice(1);
+        document.getElementById('dashboardTitle').textContent = `Welcome back, ${user.name || 'User'}!`;
+
+        // Setup navigation based on role
+        const teacherNav = [
+            { id: 'savedJobs', icon: '💾', label: 'Saved Jobs' },
+            { id: 'applications', icon: '📝', label: 'My Applications' },
+            { id: 'profile', icon: '👤', label: 'Profile' }
+        ];
+
+        const employerNav = [
+            { id: 'jobPosts', icon: '💼', label: 'My Job Posts' },
+            { id: 'applicants', icon: '👥', label: 'Applicants' },
+            { id: 'profile', icon: '🏢', label: 'Company Profile' }
+        ];
+
+        const navItems = userRole === 'employer' ? employerNav : teacherNav;
+        const dashboardNav = document.getElementById('dashboardNav');
+
+        dashboardNav.innerHTML = navItems.map(item => `
+            <li class="nav-item">
+                <a href="#" class="nav-link ${item.id === (userRole === 'employer' ? 'jobPosts' : 'savedJobs') ? 'active' : ''}" 
+                   onclick="showSection('${item.id}'); return false;">
+                    <span>${item.icon}</span>
+                    <span>${item.label}</span>
+                </a>
+            </li>
+        `).join('');
+
+        // Show section
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.dashboard-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remove active from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Add active to clicked nav link
+            event.target.closest('.nav-link')?.classList.add('active');
+
+            // Load section data
+            if (sectionId === 'savedJobs') loadSavedJobs();
+            if (sectionId === 'applications') loadApplications();
+            if (sectionId === 'jobPosts') loadJobPosts();
+            if (sectionId === 'applicants') loadApplicants();
+        }
+
+        // Load saved jobs
+        function loadSavedJobs() {
+            const savedJobIds = JSON.parse(localStorage.getItem('eslconnect_saved_jobs') || '[]');
+            const savedJobsGrid = document.getElementById('savedJobsGrid');
+
+            if (savedJobIds.length === 0) {
+                savedJobsGrid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">💾</div>
+                        <div class="empty-state-text">No saved jobs yet</div>
+                        <a href="jobs.html" class="btn-action btn-primary-action">Browse Jobs</a>
+                    </div>
+                `;
+                return;
+            }
+
+            const savedJobsData = sampleJobs.filter(job => savedJobIds.includes(job.id));
+
+            savedJobsGrid.innerHTML = savedJobsData.map(job => `
+                <div class="job-card">
+                    <div class="job-card-header">
+                        <div>
+                            <h3 class="job-title">${job.title}</h3>
+                            <div class="job-company">${job.company}</div>
+                        </div>
+                    </div>
+                    <div class="job-meta">
+                        <div class="meta-item">
+                            <span>📍</span>
+                            <span>${job.location}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>💰</span>
+                            <span>${job.salary}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>💼</span>
+                            <span>${job.type}</span>
+                        </div>
+                    </div>
+                    <div class="job-actions">
+                        <button class="btn-action btn-primary-action" onclick="window.location.href='job-detail.html?id=${job.id}'">View Details</button>
+                        <button class="btn-action btn-secondary-action" onclick="applyJob(${job.id})">Apply Now</button>
+                        <button class="btn-action btn-danger-action" onclick="removeSavedJob(${job.id})">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load applications
+        function loadApplications() {
+            const applications = JSON.parse(localStorage.getItem('eslconnect_applications') || '[]');
+            const applicationsGrid = document.getElementById('applicationsGrid');
+
+            if (applications.length === 0) {
+                applicationsGrid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📝</div>
+                        <div class="empty-state-text">No applications yet</div>
+                        <a href="jobs.html" class="btn-action btn-primary-action">Find Jobs</a>
+                    </div>
+                `;
+                return;
+            }
+
+            applicationsGrid.innerHTML = applications.map(app => `
+                <div class="job-card">
+                    <div class="job-card-header">
+                        <div>
+                            <h3 class="job-title">${app.jobTitle}</h3>
+                            <div class="job-company">${app.company}</div>
+                        </div>
+                        <span class="status-badge status-${app.status}">${app.status.charAt(0).toUpperCase() + app.status.slice(1)}</span>
+                    </div>
+                    <div class="job-meta">
+                        <div class="meta-item">
+                            <span>📅</span>
+                            <span>Applied: ${app.appliedDate}</span>
+                        </div>
+                    </div>
+                    <div class="job-actions">
+                        <button class="btn-action btn-secondary-action" onclick="window.location.href='job-detail.html?id=${app.jobId}'">View Job</button>
+                        <button class="btn-action btn-danger-action" onclick="withdrawApplication(${app.id})">Withdraw</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load job posts (employer)
+        function loadJobPosts() {
+            const jobPosts = JSON.parse(localStorage.getItem('eslconnect_job_posts') || '[]');
+            const jobPostsGrid = document.getElementById('jobPostsGrid');
+
+            if (jobPosts.length === 0) {
+                jobPostsGrid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">💼</div>
+                        <div class="empty-state-text">No job posts yet</div>
+                        <a href="post-job.html" class="btn-action btn-primary-action">Post a Job</a>
+                    </div>
+                `;
+                return;
+            }
+
+            jobPostsGrid.innerHTML = jobPosts.map(job => `
+                <div class="job-card">
+                    <div class="job-card-header">
+                        <div>
+                            <h3 class="job-title">${job.title}</h3>
+                            <div class="job-company">${job.location}</div>
+                        </div>
+                        <span class="status-badge status-${job.status === 'active' ? 'accepted' : 'pending'}">${job.status}</span>
+                    </div>
+                    <div class="job-meta">
+                        <div class="meta-item">
+                            <span>📅</span>
+                            <span>Posted: ${job.postedDate}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>👥</span>
+                            <span>${job.applicantsCount || 0} applicants</span>
+                        </div>
+                    </div>
+                    <div class="job-actions">
+                        <button class="btn-action btn-primary-action" onclick="alert('Edit functionality coming soon!')">Edit</button>
+                        <button class="btn-action btn-secondary-action" onclick="showSection('applicants')">View Applicants</button>
+                        <button class="btn-action btn-danger-action" onclick="deleteJobPost(${job.id})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load applicants (employer)
+        function loadApplicants() {
+            const applicantsGrid = document.getElementById('applicantsGrid');
+            applicantsGrid.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">👥</div>
+                    <div class="empty-state-text">No applicants yet</div>
+                    <p style="color: rgba(255,255,255,0.6); margin-top: var(--spacing-md);">Applicants will appear here when teachers apply to your jobs</p>
+                </div>
+            `;
+        }
+
+        // Helper functions
+        function removeSavedJob(jobId) {
+            let savedJobs = JSON.parse(localStorage.getItem('eslconnect_saved_jobs') || '[]');
+            savedJobs = savedJobs.filter(id => id !== jobId);
+            localStorage.setItem('eslconnect_saved_jobs', JSON.stringify(savedJobs));
+            loadSavedJobs();
+            showToast('Job removed from saved');
+        }
+
+        function applyJob(jobId) {
+            const job = sampleJobs.find(j => j.id === jobId);
+            if (!job) return;
+
+            const applications = JSON.parse(localStorage.getItem('eslconnect_applications') || '[]');
+            const alreadyApplied = applications.some(app => app.jobId === jobId);
+
+            if (alreadyApplied) {
+                alert('You have already applied to this job');
+                return;
+            }
+
+            const newApplication = {
+                id: Date.now(),
+                jobId: job.id,
+                jobTitle: job.title,
+                company: job.company,
+                appliedDate: new Date().toISOString().split('T')[0],
+                status: 'pending'
+            };
+
+            applications.push(newApplication);
+            localStorage.setItem('eslconnect_applications', JSON.stringify(applications));
+            showToast('Application submitted successfully!');
+            showSection('applications');
+        }
+
+        function withdrawApplication(appId) {
+            if (!confirm('Are you sure you want to withdraw this application?')) return;
+
+            let applications = JSON.parse(localStorage.getItem('eslconnect_applications') || '[]');
+            applications = applications.filter(app => app.id !== appId);
+            localStorage.setItem('eslconnect_applications', JSON.stringify(applications));
+            loadApplications();
+            showToast('Application withdrawn');
+        }
+
+        function deleteJobPost(jobId) {
+            if (!confirm('Are you sure you want to delete this job post?')) return;
+
+            let jobPosts = JSON.parse(localStorage.getItem('eslconnect_job_posts') || '[]');
+            jobPosts = jobPosts.filter(job => job.id !== jobId);
+            localStorage.setItem('eslconnect_job_posts', JSON.stringify(jobPosts));
+            loadJobPosts();
+            showToast('Job post deleted');
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('eslconnect_user');
+                window.location.href = 'index.html';
+            }
+        }
+
+        function showToast(message) {
+            // Simple toast notification (reuse from job-detail.html)
+            const toast = document.createElement('div');
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 2rem;
+                right: 2rem;
+                background: rgba(102, 126, 234, 0.95);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Initial load
+        if (userRole === 'employer') {
+            showSection('jobPosts');
+        } else {
+            showSection('savedJobs');
+        }
+    </script>
+</body>
+
+</html>

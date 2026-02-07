@@ -1,0 +1,13 @@
+{
+  "name": "esl-connect",
+  "version": "1.0.0",
+  "description": "ESL Connect - Premium job board connecting ESL teachers with opportunities worldwide",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve ."
+  },
+  "keywords": ["esl", "teaching", "jobs", "education"],
+  "author": "",
+  "license": "MIT"
+}

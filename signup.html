@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - ESL Connect</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-md);
+        }
+
+        .auth-box {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-2xl);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .auth-logo {
+            width: 80px;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .auth-header h1 {
+            font-size: 2rem;
+            margin-bottom: var(--spacing-xs);
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .auth-header p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+        }
+
+        /* User Type Selection */
+        .user-type-selection {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .user-type-card {
+            padding: var(--spacing-lg);
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .user-type-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .user-type-card.selected {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .user-type-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .user-type-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: var(--spacing-xs);
+            color: #ffffff;
+        }
+
+        .user-type-card p {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-sm);
+            color: #ffffff;
+            font-size: 1rem;
+            font-family: var(--font-primary);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-md);
+        }
+
+        .password-strength {
+            margin-top: var(--spacing-xs);
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
+        }
+
+        .password-strength-bar.weak {
+            width: 33%;
+            background: #f5576c;
+        }
+
+        .password-strength-bar.medium {
+            width: 66%;
+            background: #f093fb;
+        }
+
+        .password-strength-bar.strong {
+            width: 100%;
+            background: #34A853;
+        }
+
+        .password-hint {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: var(--spacing-xs);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-top: 4px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .checkbox-group a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .checkbox-group a:hover {
+            text-decoration: underline;
+        }
+
+        .btn-auth {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-gradient);
+            color: #ffffff;
+            border: none;
+            border-radius: var(--radius-full);
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-auth:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-auth:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: var(--spacing-xl) 0;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .divider span {
+            padding: 0 var(--spacing-md);
+        }
+
+        .btn-social {
+            width: 100%;
+            padding: 1rem;
+            background: #ffffff;
+            border: none;
+            border-radius: var(--radius-sm);
+            color: #333;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+        }
+
+        .btn-social:hover {
+            background: #f5f5f5;
+            transform: translateY(-2px);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: var(--spacing-xl);
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .auth-footer p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+        }
+
+        .auth-footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .auth-footer a:hover {
+            color: var(--light-purple);
+        }
+
+        .back-home {
+            text-align: center;
+            margin-top: var(--spacing-lg);
+        }
+
+        .back-home a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
+        }
+
+        .back-home a:hover {
+            color: #ffffff;
+        }
+
+        @media (max-width: 600px) {
+            .auth-box {
+                padding: var(--spacing-xl);
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .user-type-selection {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <div class="auth-header">
+                <a href="index.html">
+                    <img src="logo.svg" alt="ESL Connect Logo" class="auth-logo">
+                </a>
+                <h1>Create Account</h1>
+                <p>Join ESL Connect and start your journey</p>
+            </div>
+
+            <!-- User Type Selection -->
+            <div class="user-type-selection">
+                <div class="user-type-card" data-type="teacher">
+                    <div class="user-type-icon">👨‍🏫</div>
+                    <h3>I'm a Teacher</h3>
+                    <p>Looking for teaching opportunities</p>
+                </div>
+                <div class="user-type-card" data-type="employer">
+                    <div class="user-type-icon">💼</div>
+                    <h3>I'm an Employer</h3>
+                    <p>Looking to hire teachers</p>
+                </div>
+            </div>
+
+            <form id="signupForm">
+                <input type="hidden" id="userType" name="userType" value="">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" required placeholder="John">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" required placeholder="Smith">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required
+                        placeholder="Create a strong password">
+                    <div class="password-strength">
+                        <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                    </div>
+                    <p class="password-hint">Use 8+ characters with a mix of letters, numbers & symbols</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required
+                        placeholder="Re-enter your password">
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms">
+                        I agree to the <a href="#terms">Terms of Service</a> and <a href="#privacy">Privacy Policy</a>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-auth" id="submitBtn" disabled>Create Account</button>
+            </form>
+
+            <div class="divider">
+                <span>or sign up with</span>
+            </div>
+
+            <button type="button" class="btn-social" id="googleSignup">
+                <svg width="18" height="18" viewBox="0 0 18 18">
+                    <path fill="#4285F4"
+                        d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" />
+                    <path fill="#34A853"
+                        d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" />
+                    <path fill="#FBBC05"
+                        d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z" />
+                    <path fill="#EA4335"
+                        d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z" />
+                </svg>
+                Sign up with Google
+            </button>
+
+            <div class="auth-footer">
+                <p>Already have an account? <a href="login.html">Sign in</a></p>
+            </div>
+
+            <div class="back-home">
+                <a href="index.html">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        // User type selection
+        const userTypeCards = document.querySelectorAll('.user-type-card');
+        const userTypeInput = document.getElementById('userType');
+        const submitBtn = document.getElementById('submitBtn');
+        const termsCheckbox = document.getElementById('terms');
+
+        userTypeCards.forEach(card => {
+            card.addEventListener('click', function () {
+                userTypeCards.forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                userTypeInput.value = this.dataset.type;
+                updateSubmitButton();
+            });
+        });
+
+        // Password strength checker
+        const passwordInput = document.getElementById('password');
+        const strengthBar = document.getElementById('passwordStrengthBar');
+
+        passwordInput.addEventListener('input', function () {
+            const password = this.value;
+            let strength = 0;
+
+            if (password.length >= 8) strength++;
+            if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+            if (password.match(/[0-9]/)) strength++;
+            if (password.match(/[^a-zA-Z0-9]/)) strength++;
+
+            strengthBar.className = 'password-strength-bar';
+            if (strength >= 4) {
+                strengthBar.classList.add('strong');
+            } else if (strength >= 2) {
+                strengthBar.classList.add('medium');
+            } else if (strength >= 1) {
+                strengthBar.classList.add('weak');
+            }
+        });
+
+        // Update submit button state
+        function updateSubmitButton() {
+            const hasUserType = userTypeInput.value !== '';
+            const termsAccepted = termsCheckbox.checked;
+            submitBtn.disabled = !(hasUserType && termsAccepted);
+        }
+
+        termsCheckbox.addEventListener('change', updateSubmitButton);
+
+        // Form submission
+        document.getElementById('signupForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = {
+                userType: userTypeInput.value,
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                confirmPassword: document.getElementById('confirmPassword').value
+            };
+
+            // Validation
+            if (!formData.userType) {
+                alert('Please select whether you are a teacher or employer');
+                return;
+            }
+
+            if (formData.password !== formData.confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+
+            if (formData.password.length < 8) {
+                alert('Password must be at least 8 characters long');
+                return;
+            }
+
+            // Simulate signup
+            console.log('Signup data:', { ...formData, password: '***', confirmPassword: '***' });
+
+            // Store mock session
+            localStorage.setItem('eslconnect_user', JSON.stringify({
+                email: formData.email,
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                userType: formData.userType,
+                loggedIn: true,
+                timestamp: new Date().toISOString()
+            }));
+
+            alert(`Account created successfully! Welcome, ${formData.firstName}!`);
+
+            // Redirect based on user type
+            setTimeout(() => {
+                if (formData.userType === 'teacher') {
+                    window.location.href = 'post-resume.html';
+                } else {
+                    window.location.href = 'post-job.html';
+                }
+            }, 1000);
+
+            // In production:
+            // fetch('/api/auth/signup', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify(formData)
+            // }).then(response => response.json())
+            //   .then(data => {
+            //       if (data.success) {
+            //           localStorage.setItem('token', data.token);
+            //           window.location.href = data.userType === 'teacher' ? '/teacher/dashboard' : '/employer/dashboard';
+            //       } else {
+            //           alert(data.message);
+            //       }
+            //   });
+        });
+
+        // Google signup
+        document.getElementById('googleSignup').addEventListener('click', function () {
+            alert('Google Sign-Up integration coming soon!');
+        });
+    </script>
+</body>
+
+</html>

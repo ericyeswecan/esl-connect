@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Profile - ESL Connect</title>
+    <meta name="description" content="View detailed teacher profile and contact information">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Navigation */
+        .nav-header {
+            position: sticky;
+            top: 0;
+            background: rgba(30, 0, 75, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            padding: var(--spacing-md);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb-nav {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb-link {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--accent-blue);
+        }
+
+        .breadcrumb-separator {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .breadcrumb-current {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.9rem;
+        }
+
+        /* Profile Container */
+        .profile-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-xl) var(--spacing-md);
+        }
+
+        /* Profile Header */
+        .profile-header {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+            backdrop-filter: blur(10px);
+            display: flex;
+            gap: var(--spacing-xl);
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .profile-photo-large {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--light-purple) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            flex-shrink: 0;
+        }
+
+        .profile-info {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .profile-name {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .profile-headline {
+            font-size: 1.25rem;
+            color: var(--accent-blue);
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .profile-meta {
+            display: flex;
+            gap: var(--spacing-lg);
+            flex-wrap: wrap;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+        }
+
+        .btn-contact {
+            padding: 1rem 2.5rem;
+            background: var(--primary-gradient);
+            color: #ffffff;
+            border: none;
+            border-radius: var(--radius-full);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-contact:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Content Grid */
+        .profile-content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--spacing-xl);
+        }
+
+        /* Profile Sections */
+        .profile-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .section-content {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+        }
+
+        .section-content p {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .section-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .section-content li {
+            padding: var(--spacing-sm) 0;
+            padding-left: var(--spacing-lg);
+            position: relative;
+        }
+
+        .section-content li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--accent-blue);
+            font-weight: 700;
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+        }
+
+        .skill-badge {
+            padding: 0.5rem 1rem;
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid var(--accent-blue);
+            border-radius: var(--radius-full);
+            color: var(--accent-blue);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Video Section */
+        .video-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-xl);
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .video-placeholder {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        /* Sidebar */
+        .profile-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+        }
+
+        .sidebar-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+        }
+
+        .sidebar-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .info-item {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .info-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .info-value {
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .cert-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+
+        .cert-item {
+            padding: var(--spacing-sm);
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 3px solid var(--accent-blue);
+            border-radius: var(--radius-sm);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .profile-content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .profile-meta {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .profile-photo-large {
+                width: 120px;
+                height: 120px;
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="nav-header">
+        <div class="container"
+            style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem;">
+            <a href="index.html" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none;">
+                <img src="logo.svg" alt="ESL Connect" style="width: 40px; height: 40px;">
+                <span style="color: white; font-weight: 600; font-size: 1.1rem;">ESL Connect</span>
+            </a>
+            <div class="nav-buttons" style="display: flex; gap: 1rem;">
+                <a href="login.html" class="btn"
+                    style="padding: 0.6rem 1.5rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); border-radius: 50px; color: white; text-decoration: none; font-size: 0.95rem;">Sign
+                    In</a>
+                <a href="signup.html" class="btn btn-primary"
+                    style="padding: 0.6rem 1.5rem; border-radius: 50px; font-size: 0.95rem;">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <nav class="breadcrumb-nav">
+            <a href="index.html" class="breadcrumb-link">Home</a>
+            <span class="breadcrumb-separator">›</span>
+            <a href="resumes.html" class="breadcrumb-link">Teachers</a>
+            <span class="breadcrumb-separator">›</span>
+            <span class="breadcrumb-current" id="breadcrumbName">Teacher Profile</span>
+        </nav>
+    </div>
+
+    <!-- Profile Container -->
+    <div class="profile-container">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-photo-large" id="profilePhoto">👩‍🏫</div>
+            <div class="profile-info">
+                <h1 class="profile-name" id="profileName">Loading...</h1>
+                <div class="profile-headline" id="profileHeadline">Loading...</div>
+                <div class="profile-meta">
+                    <div class="meta-item">
+                        <span>📍</span>
+                        <span id="profileLocation">Loading...</span>
+                    </div>
+                    <div class="meta-item">
+                        <span>💼</span>
+                        <span id="profileExperience">Loading...</span>
+                    </div>
+                    <div class="meta-item">
+                        <span id="availabilityIcon">✓</span>
+                        <span id="profileAvailability">Loading...</span>
+                    </div>
+                </div>
+                <button class="btn-contact" onclick="contactTeacher()">Contact Teacher</button>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="profile-content-grid">
+            <!-- Left Column -->
+            <div>
+                <!-- Video Introduction -->
+                <div class="video-container" id="videoSection" style="display: none;">
+                    <div class="section-title">🎥 Video Introduction</div>
+                    <div class="video-placeholder">
+                        <span>▶️</span>
+                    </div>
+                    <p style="color: rgba(255,255,255,0.7);">Click to play video introduction</p>
+                </div>
+
+                <!-- About -->
+                <div class="profile-section">
+                    <h2 class="section-title">👤 About</h2>
+                    <div class="section-content">
+                        <p id="profileBio">Loading...</p>
+                    </div>
+                </div>
+
+                <!-- Skills -->
+                <div class="profile-section">
+                    <h2 class="section-title">⭐ Teaching Specialties</h2>
+                    <div class="skills-grid" id="skillsGrid">
+                        <span class="skill-badge">Loading...</span>
+                    </div>
+                </div>
+
+                <!-- Experience -->
+                <div class="profile-section">
+                    <h2 class="section-title">💼 Teaching Experience</h2>
+                    <div class="section-content">
+                        <p><strong id="experienceYears">0</strong> years of ESL teaching experience in East Asia</p>
+                        <p>Specialized in working with diverse student groups and adapting teaching methods to different
+                            learning styles and cultural backgrounds.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Sidebar -->
+            <div class="profile-sidebar">
+                <!-- Quick Info -->
+                <div class="sidebar-card">
+                    <h3>Quick Info</h3>
+                    <div class="info-item">
+                        <div class="info-label">Experience</div>
+                        <div class="info-value" id="sidebarExperience">Loading...</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Availability</div>
+                        <div class="info-value" id="sidebarAvailability">Loading...</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Preferred Locations</div>
+                        <div class="info-value" id="sidebarLocations">Loading...</div>
+                    </div>
+                </div>
+
+                <!-- Certifications -->
+                <div class="sidebar-card">
+                    <h3>Certifications</h3>
+                    <div class="cert-list" id="certList">
+                        <div class="cert-item">Loading...</div>
+                    </div>
+                </div>
+
+                <!-- Contact Card -->
+                <div class="sidebar-card">
+                    <h3>Interested?</h3>
+                    <p style="color: rgba(255,255,255,0.8); margin-bottom: var(--spacing-md); line-height: 1.6;">
+                        Contact this teacher to discuss opportunities at your school.
+                    </p>
+                    <button class="btn-contact" style="width: 100%;" onclick="contactTeacher()">Send Message</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Sample teacher data (same as resumes.html)
+        const sampleTeachers = [
+            {
+                id: 1,
+                name: "Sarah Johnson",
+                photo: "👩‍🏫",
+                headline: "Experienced Elementary ESL Teacher",
+                location: "Currently in Seoul, South Korea",
+                countryPreference: ["South Korea", "Japan"],
+                experience: "5+",
+                experienceYears: 6,
+                certifications: ["TEFL Certification", "TESOL Certification", "BA in Education"],
+                skills: ["Young Learners", "Phonics", "Classroom Management", "Curriculum Development", "Parent Communication"],
+                bio: "Passionate educator with 6 years of experience teaching elementary students in East Asia. I specialize in creating engaging, interactive lessons that make learning English fun and effective for young learners. My approach focuses on building confidence through positive reinforcement and age-appropriate activities.",
+                availability: "Available",
+                hasVideo: true
+            },
+            {
+                id: 2,
+                name: "Michael Chen",
+                photo: "👨‍🏫",
+                headline: "Business English Specialist",
+                location: "Based in Tokyo, Japan",
+                countryPreference: ["Japan", "South Korea"],
+                experience: "5+",
+                experienceYears: 8,
+                certifications: ["TESOL Certification", "CELTA", "MBA"],
+                skills: ["Business English", "Corporate Training", "TOEIC Prep", "Presentation Skills", "Professional Communication"],
+                bio: "MBA holder with extensive experience training business professionals in English communication. I help corporate clients improve their English for international business, presentations, and negotiations.",
+                availability: "Available",
+                hasVideo: true
+            },
+            // Add more teachers as needed
+        ];
+
+        // Get teacher ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const teacherId = parseInt(urlParams.get('id')) || 1;
+
+        // Find the teacher
+        const teacher = sampleTeachers.find(t => t.id === teacherId);
+
+        if (!teacher) {
+            window.location.href = 'resumes.html';
+        } else {
+            // Check if user is logged in
+            const user = JSON.parse(localStorage.getItem('eslconnect_user') || '{}');
+            if (!user.loggedIn) {
+                alert('Please sign in to view teacher profiles');
+                window.location.href = 'login.html';
+            }
+
+            // Populate profile
+            document.getElementById('profilePhoto').textContent = teacher.photo;
+            document.getElementById('profileName').textContent = teacher.name;
+            document.getElementById('profileHeadline').textContent = teacher.headline;
+            document.getElementById('profileLocation').textContent = teacher.location;
+            document.getElementById('profileExperience').textContent = `${teacher.experienceYears} years experience`;
+            document.getElementById('profileAvailability').textContent = teacher.availability;
+            document.getElementById('profileBio').textContent = teacher.bio;
+            document.getElementById('breadcrumbName').textContent = teacher.name;
+
+            // Skills
+            const skillsGrid = document.getElementById('skillsGrid');
+            skillsGrid.innerHTML = teacher.skills.map(skill => `
+                <span class="skill-badge">${skill}</span>
+            `).join('');
+
+            // Experience
+            document.getElementById('experienceYears').textContent = teacher.experienceYears;
+
+            // Sidebar
+            document.getElementById('sidebarExperience').textContent = `${teacher.experienceYears} years`;
+            document.getElementById('sidebarAvailability').textContent = teacher.availability;
+            document.getElementById('sidebarLocations').textContent = teacher.countryPreference.join(', ');
+
+            // Certifications
+            const certList = document.getElementById('certList');
+            certList.innerHTML = teacher.certifications.map(cert => `
+                <div class="cert-item">${cert}</div>
+            `).join('');
+
+            // Video section
+            if (teacher.hasVideo) {
+                document.getElementById('videoSection').style.display = 'block';
+            }
+        }
+
+        // Contact teacher
+        function contactTeacher() {
+            const user = JSON.parse(localStorage.getItem('eslconnect_user') || '{}');
+
+            if (!user.loggedIn) {
+                alert('Please sign in to contact teachers');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            alert('Contact form coming soon! (Demo mode)\n\nIn production, this would open a contact form or messaging system.');
+        }
+    </script>
+</body>
+
+</html>
