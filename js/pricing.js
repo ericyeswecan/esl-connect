@@ -2,8 +2,8 @@
 // ESL Connect - Pricing Page (Stripe Integration)
 // ===================================
 
-// Initialize Stripe (you'll need to replace with your publishable key)
-const STRIPE_PUBLISHABLE_KEY = 'pk_test_YOUR_KEY_HERE'; // Replace this!
+// Initialize Stripe
+const STRIPE_PUBLISHABLE_KEY = 'pk_test_51SykPiB6v5gYlR6rkMlAzeRyVl76RiWx5ksV1A0JccXnIpv0N8FDf7rb8TcB0P9Gq4WvRdPZqGFFtTDgb11bwUHj00yusZlxmO';
 const stripe = window.Stripe ? window.Stripe(STRIPE_PUBLISHABLE_KEY) : null;
 
 // ===================================
