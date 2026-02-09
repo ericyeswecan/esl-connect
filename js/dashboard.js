@@ -80,6 +80,27 @@ function initDashboard() {
     if (profileForm) {
         profileForm.addEventListener('submit', updateProfile);
     }
+
+    // Setup avatar preview listener
+    const avatarInput = document.getElementById('avatarInput');
+    if (avatarInput) {
+        avatarInput.addEventListener('change', handleAvatarPreview);
+    }
+}
+
+function handleAvatarPreview(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const previewImg = document.getElementById('avatarImg');
+            const placeholder = document.getElementById('avatarPlaceholder');
+            previewImg.src = e.target.result;
+            previewImg.style.display = 'block';
+            placeholder.style.display = 'none';
+        }
+        reader.readAsDataURL(file);
+    }
 }
 
 // ===================================
@@ -431,7 +452,7 @@ async function loadProfile() {
     if (!currentUser.id) return;
 
     try {
-        const { data: profile, error } = await supabase
+        const { data: profile, error } = await eslSupabase
             .from('profiles')
             .select('*')
             .eq('id', currentUser.id)
@@ -449,8 +470,29 @@ async function loadProfile() {
             if (document.getElementById('profileSkills')) document.getElementById('profileSkills').value = (profile.skills || []).join(', ');
             if (document.getElementById('profileExperience')) document.getElementById('profileExperience').value = profile.experience || '';
 
+            // Show avatar if exists
+            if (profile.avatar_url) {
+                const previewImg = document.getElementById('avatarImg');
+                const placeholder = document.getElementById('avatarPlaceholder');
+                const sidebarAvatar = document.getElementById('userAvatar');
+
+                if (previewImg) {
+                    previewImg.src = profile.avatar_url;
+                    previewImg.style.display = 'block';
+                }
+                if (placeholder) placeholder.style.display = 'none';
+
+                // Sidebar avatar update
+                if (sidebarAvatar) {
+                    sidebarAvatar.style.backgroundImage = `url(${profile.avatar_url})`;
+                    sidebarAvatar.style.backgroundSize = 'cover';
+                    sidebarAvatar.textContent = '';
+                }
+            }
+
             // Sync with local storage
             currentUser.name = profile.full_name;
+            currentUser.avatar_url = profile.avatar_url;
             localStorage.setItem('eslconnect_user', JSON.stringify(currentUser));
             document.getElementById('userName').textContent = profile.full_name || 'User';
         }
@@ -482,7 +524,30 @@ async function updateProfile(e) {
     }
 
     try {
-        const { error } = await supabase
+        // 1. Handle Avatar Upload if necessary
+        const avatarFile = document.getElementById('avatarInput').files[0];
+        if (avatarFile) {
+            saveBtn.textContent = 'Uploading image...';
+            const fileExt = avatarFile.name.split('.').pop();
+            const fileName = `${currentUser.id}-${Math.random()}.${fileExt}`;
+            const filePath = `avatars/${fileName}`;
+
+            const { error: uploadError, data } = await eslSupabase.storage
+                .from('avatars')
+                .upload(filePath, avatarFile);
+
+            if (uploadError) throw uploadError;
+
+            // Get public URL
+            const { data: { publicUrl } } = eslSupabase.storage
+                .from('avatars')
+                .getPublicUrl(filePath);
+
+            updatedData.avatar_url = publicUrl;
+        }
+
+        saveBtn.textContent = 'Saving profile...';
+        const { error } = await eslSupabase
             .from('profiles')
             .update(updatedData)
             .eq('id', currentUser.id);
