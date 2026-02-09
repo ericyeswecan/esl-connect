@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Cancelled - ESL Connect</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .cancel-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-md);
+        }
+
+        .cancel-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-2xl);
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .cancel-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(239, 68, 68, 0.2);
+            border: 2px solid #ef4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--spacing-lg);
+            font-size: 3rem;
+            color: #ef4444;
+        }
+
+        .cancel-card h1 {
+            font-size: 2rem;
+            margin-bottom: var(--spacing-md);
+            color: #ffffff;
+        }
+
+        .cancel-card p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            margin-bottom: var(--spacing-xl);
+            line-height: 1.6;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .action-buttons .btn {
+            min-width: 180px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cancel-container">
+        <div class="cancel-card">
+            <div class="cancel-icon">✕</div>
+            <h1>Payment Cancelled</h1>
+            <p>Your payment was cancelled. No charges have been made to your account.</p>
+            <p style="font-size: 0.95rem; margin-top: var(--spacing-md);">
+                If you experienced any issues or have questions about our pricing, please don't hesitate to contact our
+                support team.
+            </p>
+
+            <div class="action-buttons">
+                <a href="pricing.html" class="btn btn-primary">Try Again</a>
+                <a href="index.html" class="btn"
+                    style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3);">Back to Home</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

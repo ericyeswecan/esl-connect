@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - ESL Connect</title>
+    <meta name="description"
+        content="Subscribe to access unlimited teacher resumes and connect with qualified ESL teachers across East Asia.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ericyeswecan.github.io/esl-connect/pricing.html">
+    <meta property="og:title" content="Pricing - ESL Connect">
+    <meta property="og:description"
+        content="Subscribe to access unlimited teacher resumes and connect with qualified ESL teachers.">
+    <meta property="og:image" content="https://ericyeswecan.github.io/esl-connect/logo.svg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://ericyeswecan.github.io/esl-connect/pricing.html">
+    <meta property="twitter:title" content="Pricing - ESL Connect">
+    <meta property="twitter:description"
+        content="Subscribe to access unlimited teacher resumes and connect with qualified ESL teachers.">
+    <meta property="twitter:image" content="https://ericyeswecan.github.io/esl-connect/logo.svg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Pricing Page Styles */
+        .pricing-header {
+            text-align: center;
+            padding: var(--spacing-2xl) var(--spacing-md);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+
+        .pricing-header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: var(--spacing-sm);
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pricing-header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .pricing-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-2xl) var(--spacing-md);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--spacing-xl);
+            margin-top: var(--spacing-xl);
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border: 2px solid var(--accent-blue);
+            transform: scale(1.05);
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 50px rgba(102, 126, 234, 0.4);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: var(--primary-gradient);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .plan-price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .plan-price span {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .plan-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: var(--spacing-lg);
+            font-size: 0.95rem;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .plan-features li {
+            color: rgba(255, 255, 255, 0.8);
+            padding: var(--spacing-sm) 0;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .plan-features li::before {
+            content: "✓";
+            color: var(--accent-blue);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .btn-subscribe {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: var(--primary-gradient);
+            color: #ffffff;
+            border: none;
+            border-radius: var(--radius-full);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-subscribe:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-subscribe.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .faq-section {
+            max-width: 800px;
+            margin: var(--spacing-2xl) auto;
+            padding: 0 var(--spacing-md);
+        }
+
+        .faq-section h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: var(--spacing-xl);
+            color: #ffffff;
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .faq-question {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .faq-answer {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="nav-header">
+        <div class="container"
+            style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem;">
+            <a href="index.html" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none;">
+                <img src="logo.svg" alt="ESL Connect" style="width: 40px; height: 40px;">
+                <span style="color: white; font-weight: 600; font-size: 1.1rem;">ESL Connect</span>
+            </a>
+            <div class="nav-buttons" style="display: flex; gap: 1rem;">
+                <a href="login.html" class="btn"
+                    style="padding: 0.6rem 1.5rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); border-radius: 50px; color: white; text-decoration: none; font-size: 0.95rem;">Sign
+                    In</a>
+                <a href="signup.html" class="btn btn-primary"
+                    style="padding: 0.6rem 1.5rem; border-radius: 50px; font-size: 0.95rem;">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Pricing Header -->
+    <div class="pricing-header">
+        <h1>Simple, Transparent Pricing</h1>
+        <p>Choose the plan that works best for your hiring needs</p>
+    </div>
+
+    <!-- Pricing Plans -->
+    <div class="pricing-container">
+        <div class="pricing-grid">
+            <!-- Free Plan -->
+            <div class="pricing-card">
+                <div class="plan-name">Free</div>
+                <div class="plan-price">$0<span>/month</span></div>
+                <p class="plan-description">Perfect for exploring our platform</p>
+                <ul class="plan-features">
+                    <li>Browse job listings</li>
+                    <li>Post your resume</li>
+                    <li>Basic profile</li>
+                    <li>Email support</li>
+                </ul>
+                <button class="btn-subscribe secondary" onclick="window.location.href='signup.html'">Get
+                    Started</button>
+            </div>
+
+            <!-- Monthly Plan (Featured) -->
+            <div class="pricing-card featured">
+                <div class="pricing-badge">Most Popular</div>
+                <div class="plan-name">Professional</div>
+                <div class="plan-price">$29.99<span>/month</span></div>
+                <p class="plan-description">For schools actively hiring teachers</p>
+                <ul class="plan-features">
+                    <li>Unlimited resume access</li>
+                    <li>Contact teachers directly</li>
+                    <li>Post unlimited jobs</li>
+                    <li>Priority support</li>
+                    <li>Advanced search filters</li>
+                    <li>Applicant tracking</li>
+                </ul>
+                <button class="btn-subscribe" onclick="subscribe('monthly')">Subscribe Now</button>
+            </div>
+
+            <!-- Annual Plan -->
+            <div class="pricing-card">
+                <div class="pricing-badge" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">Save
+                    17%</div>
+                <div class="plan-name">Annual</div>
+                <div class="plan-price">$299<span>/year</span></div>
+                <p class="plan-description">Best value for long-term hiring</p>
+                <ul class="plan-features">
+                    <li>Everything in Professional</li>
+                    <li>Save $60 per year</li>
+                    <li>Dedicated account manager</li>
+                    <li>Custom branding</li>
+                    <li>Analytics dashboard</li>
+                    <li>API access</li>
+                </ul>
+                <button class="btn-subscribe" onclick="subscribe('annual')">Subscribe Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="faq-section">
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+            <div class="faq-question">How does the subscription work?</div>
+            <div class="faq-answer">
+                Once you subscribe, you'll get immediate access to all teacher resumes and can contact them directly.
+                Your subscription renews automatically each month/year until you cancel.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">Can I cancel anytime?</div>
+            <div class="faq-answer">
+                Yes! You can cancel your subscription at any time from your dashboard. You'll continue to have access
+                until the end of your current billing period.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">What payment methods do you accept?</div>
+            <div class="faq-answer">
+                We accept all major credit cards (Visa, Mastercard, American Express) through our secure payment
+                processor Stripe. We'll be adding PayPal and other payment methods soon.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">Is there a free trial?</div>
+            <div class="faq-answer">
+                Currently, we offer a free plan that lets you browse jobs and post your resume. To access teacher
+                resumes and contact candidates, you'll need a Professional or Annual subscription.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">Can I upgrade or downgrade my plan?</div>
+            <div class="faq-answer">
+                Yes! You can upgrade or downgrade your plan at any time from your dashboard. Changes take effect
+                immediately, and we'll prorate the charges accordingly.
+            </div>
+        </div>
+    </div>
+
+    <!-- External Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/pricing.js"></script>
+</body>
+
+</html>

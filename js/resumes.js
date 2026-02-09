@@ -204,11 +204,36 @@ function initResumePage() {
 }
 
 // ===================================
-// Check if User is Logged In
+// Check if User is Logged In and Has Access
 // ===================================
 function isLoggedIn() {
     const user = JSON.parse(localStorage.getItem('eslconnect_user') || '{}');
-    return user.loggedIn === true;
+
+    if (!user.loggedIn) {
+        return false;
+    }
+
+    // If user is an employer, check subscription
+    if (user.role === 'employer') {
+        return hasActiveSubscription(user);
+    }
+
+    // Teachers and other roles can view
+    return true;
+}
+
+// ===================================
+// Check Active Subscription
+// ===================================
+function hasActiveSubscription(user) {
+    if (!user.subscription || !user.subscription.active) {
+        return false;
+    }
+
+    const expiryDate = new Date(user.subscription.expiryDate);
+    const today = new Date();
+
+    return expiryDate > today;
 }
 
 // ===================================
@@ -330,6 +355,59 @@ function viewTeacher(teacherId) {
 }
 
 // ===================================
+// Get Access Prompt Text
+// ===================================
+function getAccessPromptText() {
+    const user = JSON.parse(localStorage.getItem('eslconnect_user') || '{}');
+
+    if (!user.loggedIn) {
+        return 'Sign in to view full profiles';
+    }
+
+    if (user.role === 'employer' && !hasActiveSubscription(user)) {
+        return 'Subscribe to view teacher profiles';
+    }
+
+    return 'Sign in to view full profiles';
+}
+
+// ===================================
+// Get Access Button Text
+// ===================================
+function getAccessButtonText() {
+    const user = JSON.parse(localStorage.getItem('eslconnect_user') || '{}');
+
+    if (!user.loggedIn) {
+        return 'Sign In';
+    }
+
+    if (user.role === 'employer' && !hasActiveSubscription(user)) {
+        return 'View Pricing';
+    }
+
+    return 'Sign In';
+}
+
+// ===================================
+// Handle Access Click
+// ===================================
+function handleAccessClick() {
+    const user = JSON.parse(localStorage.getItem('eslconnect_user') || '{}');
+
+    if (!user.loggedIn) {
+        window.location.href = 'login.html';
+        return;
+    }
+
+    if (user.role === 'employer' && !hasActiveSubscription(user)) {
+        window.location.href = 'pricing.html';
+        return;
+    }
+
+    window.location.href = 'login.html';
+}
+
+// ===================================
 // Export for Testing (if needed)
 // ===================================
 if (typeof module !== 'undefined' && module.exports) {
@@ -337,6 +415,7 @@ if (typeof module !== 'undefined' && module.exports) {
         sampleTeachers,
         filterTeachers,
         renderTeachers,
-        isLoggedIn
+        isLoggedIn,
+        hasActiveSubscription
     };
 }
