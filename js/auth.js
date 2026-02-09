@@ -6,10 +6,19 @@
  * Sign Up a new user
  */
 async function signUp(email, password, metadata) {
-    if (!supabaseClient) return { error: 'Supabase not initialized' };
+    console.log('signUp called for:', email);
+    if (!eslSupabase) {
+        console.error('eslSupabase is null');
+        return { error: { message: 'Supabase client not initialized' } };
+    }
+
+    if (!eslSupabase.auth) {
+        console.error('eslSupabase.auth is undefined!', eslSupabase);
+        return { error: { message: 'Supabase Auth module missing' } };
+    }
 
     try {
-        const { data, error } = await supabaseClient.auth.signUp({
+        const { data, error } = await eslSupabase.auth.signUp({
             email,
             password,
             options: {
@@ -22,12 +31,10 @@ async function signUp(email, password, metadata) {
 
         if (error) throw error;
 
-        // Note: Supabase automatically handles profile creation if a trigger is set up,
-        // but we'll do it manually here for certain consistency.
         if (data.user) {
-            const { error: profileError } = await supabaseClient
+            const { error: profileError } = await eslSupabase
                 .from('profiles')
-                .insert([
+                .upsert([
                     {
                         id: data.user.id,
                         email: email,
@@ -41,7 +48,7 @@ async function signUp(email, password, metadata) {
 
         return { data, error: null };
     } catch (error) {
-        console.error('Signup error:', error);
+        console.error('Signup error detail:', error);
         return { data: null, error };
     }
 }
@@ -50,10 +57,10 @@ async function signUp(email, password, metadata) {
  * Sign In an existing user
  */
 async function signIn(email, password) {
-    if (!supabaseClient) return { error: 'Supabase not initialized' };
+    if (!eslSupabase) return { error: { message: 'Supabase client not initialized' } };
 
     try {
-        const { data, error } = await supabaseClient.auth.signInWithPassword({
+        const { data, error } = await eslSupabase.auth.signInWithPassword({
             email,
             password
         });
@@ -61,22 +68,20 @@ async function signIn(email, password) {
         if (error) throw error;
 
         // Fetch additional profile data
-        const { data: profile, error: profileError } = await supabaseClient
+        const { data: profile } = await eslSupabase
             .from('profiles')
             .select('*')
             .eq('id', data.user.id)
             .single();
 
-        if (profileError) console.error('Error fetching profile:', profileError);
-
         // Fetch subscription status
-        const { data: subscription } = await supabaseClient
+        const { data: subscription } = await eslSupabase
             .from('subscriptions')
             .select('*')
             .eq('user_id', data.user.id)
             .single();
 
-        // Sync with localStorage for compatibility with existing code
+        // Sync with localStorage
         const userData = {
             id: data.user.id,
             email: data.user.email,
@@ -91,7 +96,7 @@ async function signIn(email, password) {
 
         return { data, profile, error: null };
     } catch (error) {
-        console.error('Login error:', error);
+        console.error('Login error detail:', error);
         return { data: null, error };
     }
 }
@@ -100,9 +105,9 @@ async function signIn(email, password) {
  * Sign Out
  */
 async function signOut() {
-    if (!supabaseClient) return { error: 'Supabase not initialized' };
-
-    await supabaseClient.auth.signOut();
+    if (eslSupabase) {
+        await eslSupabase.auth.signOut();
+    }
     localStorage.removeItem('eslconnect_user');
     window.location.href = 'index.html';
 }
@@ -111,51 +116,39 @@ async function signOut() {
  * Check and refresh session on page load
  */
 async function checkAuthState() {
-    if (!supabaseClient) return;
+    if (!eslSupabase || !eslSupabase.auth) return;
 
-    const { data: { session } } = await supabaseClient.auth.getSession();
+    try {
+        const { data: { session } } = await eslSupabase.auth.getSession();
 
-    if (session) {
-        // Session exists, verify profile
-        const { data: profile } = await supabaseClient
-            .from('profiles')
-            .select('*')
-            .eq('id', session.user.id)
-            .single();
+        if (session) {
+            const { data: profile } = await eslSupabase
+                .from('profiles')
+                .select('*')
+                .eq('id', session.user.id)
+                .single();
 
-        const { data: subscription } = await supabaseClient
-            .from('subscriptions')
-            .select('*')
-            .eq('user_id', session.user.id)
-            .single();
+            const { data: subscription } = await eslSupabase
+                .from('subscriptions')
+                .select('*')
+                .eq('user_id', session.user.id)
+                .single();
 
-        const userData = {
-            id: session.user.id,
-            email: session.user.email,
-            name: profile ? profile.full_name : session.user.email.split('@')[0],
-            role: profile ? profile.role : 'teacher',
-            loggedIn: true,
-            subscription: subscription || null,
-            timestamp: new Date().toISOString()
-        };
+            const userData = {
+                id: session.user.id,
+                email: session.user.email,
+                name: profile ? profile.full_name : session.user.email.split('@')[0],
+                role: profile ? profile.role : 'teacher',
+                loggedIn: true,
+                subscription: subscription || null,
+                timestamp: new Date().toISOString()
+            };
 
-        localStorage.setItem('eslconnect_user', JSON.stringify(userData));
-    } else {
-        localStorage.removeItem('eslconnect_user');
+            localStorage.setItem('eslconnect_user', JSON.stringify(userData));
+        }
+    } catch (err) {
+        console.error('AuthState check error:', err);
     }
-}
-
-// ===================================
-// UI Helpers
-// ===================================
-
-function checkPasswordStrength(password) {
-    let strength = 0;
-    if (password.length >= 8) strength++;
-    if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
-    if (password.match(/[0-9]/)) strength++;
-    if (password.match(/[^a-zA-Z0-9]/)) strength++;
-    return strength;
 }
 
 // Initial check

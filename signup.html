@@ -531,9 +531,9 @@
 
         // Google signup
         document.getElementById('googleSignup').addEventListener('click', async function () {
-            if (!supabaseClient) return;
+            if (!eslSupabase) return;
 
-            const { error } = await supabaseClient.auth.signInWithOAuth({
+            const { error } = await eslSupabase.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
                     redirectTo: window.location.origin + '/dashboard.html'
