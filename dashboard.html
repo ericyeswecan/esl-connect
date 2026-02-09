@@ -362,6 +362,63 @@
                 white-space: nowrap;
             }
         }
+
+        /* Profile Form */
+        .profile-form {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            max-width: 800px;
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .form-label {
+            display: block;
+            color: #ffffff;
+            font-weight: 500;
+            margin-bottom: var(--spacing-xs);
+            font-size: 0.95rem;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-md);
+            color: #ffffff;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 
@@ -457,12 +514,58 @@
             <!-- Profile Section -->
             <section id="profile" class="dashboard-section">
                 <div class="section-header">
-                    <h2 class="section-title">My Profile</h2>
+                    <h2 class="section-title">Edit Profile</h2>
                 </div>
-                <!-- Profile content would go here -->
-                <div id="profileDetails">
-                    <p style="color: rgba(255,255,255,0.7);">Profile management coming soon...</p>
-                </div>
+
+                <form id="profileForm" class="profile-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" id="profileFullName" class="form-input" placeholder="Your full name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Location</label>
+                            <input type="text" id="profileLocation" class="form-input"
+                                placeholder="e.g. Seoul, South Korea">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Bio</label>
+                        <textarea id="profileBio" class="form-textarea"
+                            placeholder="Tell us about yourself..."></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" id="profilePhone" class="form-input" placeholder="+1 234 567 890">
+                        </div>
+                        <div class="form-group employer-only">
+                            <label class="form-label">Company Website</label>
+                            <input type="url" id="profileWebsite" class="form-input" placeholder="https://example.com">
+                        </div>
+                    </div>
+
+                    <!-- Teacher Specific Fields -->
+                    <div class="teacher-only">
+                        <div class="form-group">
+                            <label class="form-label">Skills (comma separated)</label>
+                            <input type="text" id="profileSkills" class="form-input"
+                                placeholder="e.g. TOEFL, Kids, Business English">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Teaching Experience</label>
+                            <textarea id="profileExperience" class="form-textarea"
+                                placeholder="Describe your teaching history..."></textarea>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: var(--spacing-xl);">
+                        <button type="submit" class="btn-action btn-primary-action" id="saveProfileBtn">Save All
+                            Changes</button>
+                    </div>
+                </form>
             </section>
         </main>
     </div>

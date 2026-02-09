@@ -68,9 +68,18 @@ function initDashboard() {
     // Setup navigation
     setupNavigation(userRole);
 
+    // Load full profile data
+    loadProfile();
+
     // Show initial section
     const initialSection = userRole === 'employer' ? 'jobPosts' : 'savedJobs';
     showSection(initialSection);
+
+    // Setup profile form listener
+    const profileForm = document.getElementById('profileForm');
+    if (profileForm) {
+        profileForm.addEventListener('submit', updateProfile);
+    }
 }
 
 // ===================================
@@ -154,12 +163,25 @@ function showSection(sectionId) {
         case 'applicants':
             loadApplicants();
             break;
+        case 'profile':
+            setupProfileForm(currentUser.role);
+            break;
     }
 
     // Track analytics
     console.log('Analytics: Section viewed', {
         section: sectionId,
         timestamp: new Date().toISOString()
+    });
+}
+
+function setupProfileForm(userRole) {
+    // Show/hide role-specific fields
+    document.querySelectorAll('.teacher-only').forEach(el => {
+        el.style.display = userRole === 'teacher' ? 'block' : 'none';
+    });
+    document.querySelectorAll('.employer-only').forEach(el => {
+        el.style.display = userRole === 'employer' ? 'block' : 'none';
     });
 }
 
@@ -403,6 +425,84 @@ function showToast(message) {
 }
 
 // ===================================
+// Profile Management
+// ===================================
+async function loadProfile() {
+    if (!currentUser.id) return;
+
+    try {
+        const { data: profile, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', currentUser.id)
+            .single();
+
+        if (error) throw error;
+
+        if (profile) {
+            // Update UI fields
+            if (document.getElementById('profileFullName')) document.getElementById('profileFullName').value = profile.full_name || '';
+            if (document.getElementById('profileLocation')) document.getElementById('profileLocation').value = profile.location || '';
+            if (document.getElementById('profileBio')) document.getElementById('profileBio').value = profile.bio || '';
+            if (document.getElementById('profilePhone')) document.getElementById('profilePhone').value = profile.phone_number || '';
+            if (document.getElementById('profileWebsite')) document.getElementById('profileWebsite').value = profile.company_website || '';
+            if (document.getElementById('profileSkills')) document.getElementById('profileSkills').value = (profile.skills || []).join(', ');
+            if (document.getElementById('profileExperience')) document.getElementById('profileExperience').value = profile.experience || '';
+
+            // Sync with local storage
+            currentUser.name = profile.full_name;
+            localStorage.setItem('eslconnect_user', JSON.stringify(currentUser));
+            document.getElementById('userName').textContent = profile.full_name || 'User';
+        }
+    } catch (error) {
+        console.error('Error loading profile:', error.message);
+    }
+}
+
+async function updateProfile(e) {
+    if (e) e.preventDefault();
+
+    const saveBtn = document.getElementById('saveProfileBtn');
+    const originalBtnText = saveBtn.textContent;
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Saving...';
+
+    const updatedData = {
+        full_name: document.getElementById('profileFullName').value,
+        location: document.getElementById('profileLocation').value,
+        bio: document.getElementById('profileBio').value,
+        phone_number: document.getElementById('profilePhone').value,
+    };
+
+    if (currentUser.role === 'teacher') {
+        updatedData.skills = document.getElementById('profileSkills').value.split(',').map(s => s.trim()).filter(s => s !== '');
+        updatedData.experience = document.getElementById('profileExperience').value;
+    } else if (currentUser.role === 'employer') {
+        updatedData.company_website = document.getElementById('profileWebsite').value;
+    }
+
+    try {
+        const { error } = await supabase
+            .from('profiles')
+            .update(updatedData)
+            .eq('id', currentUser.id);
+
+        if (error) throw error;
+
+        showToast('Profile updated successfully! ✨');
+
+        // Refresh local data
+        await loadProfile();
+
+    } catch (error) {
+        alert('Error updating profile: ' + error.message);
+    } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = originalBtnText;
+    }
+}
+
+// ===================================
 // Export for Testing (if needed)
 // ===================================
 if (typeof module !== 'undefined' && module.exports) {
@@ -411,6 +511,8 @@ if (typeof module !== 'undefined' && module.exports) {
         loadSavedJobs,
         loadApplications,
         loadJobPosts,
-        loadApplicants
+        loadApplicants,
+        loadProfile,
+        updateProfile
     };
 }
