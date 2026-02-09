@@ -9,6 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <!-- Supabase Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         .auth-container {
             min-height: 100vh;
@@ -443,12 +445,7 @@
 
         passwordInput.addEventListener('input', function () {
             const password = this.value;
-            let strength = 0;
-
-            if (password.length >= 8) strength++;
-            if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
-            if (password.match(/[0-9]/)) strength++;
-            if (password.match(/[^a-zA-Z0-9]/)) strength++;
+            const strength = checkPasswordStrength(password);
 
             strengthBar.className = 'password-strength-bar';
             if (strength >= 4) {
@@ -470,7 +467,7 @@
         termsCheckbox.addEventListener('change', updateSubmitButton);
 
         // Form submission
-        document.getElementById('signupForm').addEventListener('submit', function (e) {
+        document.getElementById('signupForm').addEventListener('submit', async function (e) {
             e.preventDefault();
 
             const formData = {
@@ -498,50 +495,49 @@
                 return;
             }
 
-            // Simulate signup
-            console.log('Signup data:', { ...formData, password: '***', confirmPassword: '***' });
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating account...';
 
-            // Store mock session
-            localStorage.setItem('eslconnect_user', JSON.stringify({
-                email: formData.email,
-                name: `${formData.firstName} ${formData.lastName}`,
-                firstName: formData.firstName,
-                lastName: formData.lastName,
-                role: formData.userType,  // Changed from userType to role
-                loggedIn: true,
-                timestamp: new Date().toISOString()
-            }));
+            try {
+                const { data, error } = await signUp(formData.email, formData.password, {
+                    fullName: `${formData.firstName} ${formData.lastName}`,
+                    role: formData.userType
+                });
 
-            alert(`Account created successfully! Welcome, ${formData.firstName}!`);
-
-            // Redirect based on user type
-            setTimeout(() => {
-                if (formData.userType === 'teacher') {
-                    window.location.href = 'post-resume.html';
+                if (error) {
+                    alert('Signup failed: ' + error.message);
                 } else {
-                    window.location.href = 'post-job.html';
-                }
-            }, 1000);
+                    alert(`Account created successfully! Welcome, ${formData.firstName}!`);
 
-            // In production:
-            // fetch('/api/auth/signup', {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify(formData)
-            // }).then(response => response.json())
-            //   .then(data => {
-            //       if (data.success) {
-            //           localStorage.setItem('token', data.token);
-            //           window.location.href = data.userType === 'teacher' ? '/teacher/dashboard' : '/employer/dashboard';
-            //       } else {
-            //           alert(data.message);
-            //       }
-            //   });
+                    // Redirect based on user type
+                    setTimeout(() => {
+                        if (formData.userType === 'teacher') {
+                            window.location.href = 'post-resume.html';
+                        } else {
+                            window.location.href = 'post-job.html';
+                        }
+                    }, 1000);
+                }
+            } catch (err) {
+                alert('An unexpected error occurred. Please try again.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Create Account';
+            }
         });
 
         // Google signup
-        document.getElementById('googleSignup').addEventListener('click', function () {
-            alert('Google Sign-Up integration coming soon!');
+        document.getElementById('googleSignup').addEventListener('click', async function () {
+            if (!supabase) return;
+
+            const { error } = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: window.location.origin + '/dashboard.html'
+                }
+            });
+
+            if (error) alert('Google Sign-Up error: ' + error.message);
         });
     </script>
 </body>

@@ -24,7 +24,7 @@ exports.handler = async (event) => {
     }
 
     try {
-        const { plan, userEmail, userName } = JSON.parse(event.body);
+        const { plan, userEmail, userName, userId } = JSON.parse(event.body);
 
         // Define price IDs (you'll need to create these in Stripe Dashboard)
         const prices = {
@@ -33,8 +33,7 @@ exports.handler = async (event) => {
         };
 
         console.log('Checkout request for plan:', plan);
-        console.log('Loaded Monthly Price ID:', prices.monthly);
-        console.log('Loaded Annual Price ID:', prices.annual);
+        console.log('User ID:', userId);
 
         if (!prices[plan]) {
             return {
@@ -54,12 +53,13 @@ exports.handler = async (event) => {
                 },
             ],
             customer_email: userEmail,
-            client_reference_id: userName,
+            client_reference_id: userId, // Use Supabase UID as client_reference_id
             success_url: `${process.env.SITE_URL}/payment-success.html?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${process.env.SITE_URL}/payment-cancel.html`,
             metadata: {
                 plan: plan,
-                userName: userName
+                userName: userName,
+                userId: userId // Also keep in metadata
             }
         });
 

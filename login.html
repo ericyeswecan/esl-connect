@@ -9,6 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <!-- Supabase Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         .auth-container {
             min-height: 100vh;
@@ -287,9 +289,11 @@
     </div>
 
     <script src="js/main.js"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/auth.js"></script>
     <script>
         // Login form handler
-        document.getElementById('loginForm').addEventListener('submit', function (e) {
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
             e.preventDefault();
 
             const email = document.getElementById('email').value;
@@ -301,58 +305,41 @@
                 return;
             }
 
-            // Email validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                alert('Please enter a valid email address');
-                return;
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Signing in...';
+
+            try {
+                const { data, error } = await signIn(email, password);
+
+                if (error) {
+                    alert('Login failed: ' + error.message);
+                } else {
+                    alert('Login successful! Redirecting to dashboard...');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
+                }
+            } catch (err) {
+                alert('An unexpected error occurred. Please try again.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Sign In';
             }
-
-            // Simulate login (in production, this would call your API)
-            console.log('Login attempt:', { email, password: '***' });
-
-            // Determine role based on email (demo logic)
-            const role = email.includes('employer') || email.includes('school') || email.includes('academy') ? 'employer' : 'teacher';
-            const name = email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-
-            // Store mock session
-            localStorage.setItem('eslconnect_user', JSON.stringify({
-                email: email,
-                name: name,
-                role: role,
-                loggedIn: true,
-                timestamp: new Date().toISOString()
-            }));
-
-            alert('Login successful! Redirecting to dashboard...');
-
-            // Redirect to dashboard
-            setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 1000);
-
-            // In production:
-            // fetch('/api/auth/login', {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify({ email, password })
-            // }).then(response => response.json())
-            //   .then(data => {
-            //       if (data.success) {
-            //           localStorage.setItem('token', data.token);
-            //           window.location.href = '/dashboard';
-            //       } else {
-            //           alert(data.message);
-            //       }
-            //   });
         });
 
         // Google login handler
-        document.getElementById('googleLogin').addEventListener('click', function () {
-            alert('Google Sign-In integration coming soon!');
+        document.getElementById('googleLogin').addEventListener('click', async function () {
+            if (!supabase) return;
 
-            // In production, implement Google OAuth:
-            // window.location.href = '/api/auth/google';
+            const { error } = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: window.location.origin + '/dashboard.html'
+                }
+            });
+
+            if (error) alert('Google Sign-In error: ' + error.message);
         });
     </script>
 </body>

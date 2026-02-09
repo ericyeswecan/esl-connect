@@ -51,7 +51,8 @@ async function subscribe(plan) {
             body: JSON.stringify({
                 plan: plan,
                 userEmail: user.email,
-                userName: user.name
+                userName: user.name,
+                userId: user.id // Pass Supabase UID
             })
         });
 
@@ -129,14 +130,16 @@ function hideLoadingOverlay() {
 function checkSubscription() {
     const user = JSON.parse(localStorage.getItem('eslconnect_user') || '{}');
 
-    if (user.loggedIn && user.subscription && user.subscription.active) {
-        // User already has active subscription
-        const expiryDate = new Date(user.subscription.expiryDate);
-        const today = new Date();
+    if (user.loggedIn && user.subscription) {
+        // Handle Supabase subscription status
+        const isActive = user.subscription.status === 'active';
 
-        if (expiryDate > today) {
+        if (isActive) {
             // Show current subscription info
-            showSubscriptionInfo(user.subscription);
+            showSubscriptionInfo({
+                planName: user.subscription.plan_name || 'Professional',
+                expiryDate: user.subscription.current_period_end
+            });
         }
     }
 }
