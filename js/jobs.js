@@ -249,14 +249,31 @@ function filterJobs() {
 // Event Listeners
 // ===================================
 document.addEventListener('DOMContentLoaded', function () {
+    // Check for URL parameters (e.g., ?country=korea)
+    const urlParams = new URLSearchParams(window.location.search);
+    const countryParam = urlParams.get('country');
+
+    // If country parameter exists, set the filter
+    if (countryParam) {
+        const countryFilter = document.getElementById('countryFilter');
+        if (countryFilter) {
+            countryFilter.value = countryParam;
+        }
+    }
+
     // Set up filter event listeners
     document.getElementById('searchInput').addEventListener('input', filterJobs);
     document.getElementById('countryFilter').addEventListener('change', filterJobs);
     document.getElementById('salaryFilter').addEventListener('change', filterJobs);
     document.getElementById('typeFilter').addEventListener('change', filterJobs);
 
-    // Initial render
+    // Initial render (will apply country filter if set)
     renderJobs(filteredJobs);
+
+    // Apply filters if country parameter was set
+    if (countryParam) {
+        filterJobs();
+    }
 });
 
 // ===================================
