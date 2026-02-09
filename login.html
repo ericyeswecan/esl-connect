@@ -330,9 +330,9 @@
 
         // Google login handler
         document.getElementById('googleLogin').addEventListener('click', async function () {
-            if (!supabase) return;
+            if (!supabaseClient) return;
 
-            const { error } = await supabase.auth.signInWithOAuth({
+            const { error } = await supabaseClient.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
                     redirectTo: window.location.origin + '/dashboard.html'

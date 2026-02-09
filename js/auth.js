@@ -6,10 +6,10 @@
  * Sign Up a new user
  */
 async function signUp(email, password, metadata) {
-    if (!supabase) return { error: 'Supabase not initialized' };
+    if (!supabaseClient) return { error: 'Supabase not initialized' };
 
     try {
-        const { data, error } = await supabase.auth.signUp({
+        const { data, error } = await supabaseClient.auth.signUp({
             email,
             password,
             options: {
@@ -25,7 +25,7 @@ async function signUp(email, password, metadata) {
         // Note: Supabase automatically handles profile creation if a trigger is set up,
         // but we'll do it manually here for certain consistency.
         if (data.user) {
-            const { error: profileError } = await supabase
+            const { error: profileError } = await supabaseClient
                 .from('profiles')
                 .insert([
                     {
@@ -50,10 +50,10 @@ async function signUp(email, password, metadata) {
  * Sign In an existing user
  */
 async function signIn(email, password) {
-    if (!supabase) return { error: 'Supabase not initialized' };
+    if (!supabaseClient) return { error: 'Supabase not initialized' };
 
     try {
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
             email,
             password
         });
@@ -61,7 +61,7 @@ async function signIn(email, password) {
         if (error) throw error;
 
         // Fetch additional profile data
-        const { data: profile, error: profileError } = await supabase
+        const { data: profile, error: profileError } = await supabaseClient
             .from('profiles')
             .select('*')
             .eq('id', data.user.id)
@@ -70,7 +70,7 @@ async function signIn(email, password) {
         if (profileError) console.error('Error fetching profile:', profileError);
 
         // Fetch subscription status
-        const { data: subscription } = await supabase
+        const { data: subscription } = await supabaseClient
             .from('subscriptions')
             .select('*')
             .eq('user_id', data.user.id)
@@ -100,9 +100,9 @@ async function signIn(email, password) {
  * Sign Out
  */
 async function signOut() {
-    if (!supabase) return { error: 'Supabase not initialized' };
+    if (!supabaseClient) return { error: 'Supabase not initialized' };
 
-    await supabase.auth.signOut();
+    await supabaseClient.auth.signOut();
     localStorage.removeItem('eslconnect_user');
     window.location.href = 'index.html';
 }
@@ -111,19 +111,19 @@ async function signOut() {
  * Check and refresh session on page load
  */
 async function checkAuthState() {
-    if (!supabase) return;
+    if (!supabaseClient) return;
 
-    const { data: { session } } = await supabase.auth.getSession();
+    const { data: { session } } = await supabaseClient.auth.getSession();
 
     if (session) {
         // Session exists, verify profile
-        const { data: profile } = await supabase
+        const { data: profile } = await supabaseClient
             .from('profiles')
             .select('*')
             .eq('id', session.user.id)
             .single();
 
-        const { data: subscription } = await supabase
+        const { data: subscription } = await supabaseClient
             .from('subscriptions')
             .select('*')
             .eq('user_id', session.user.id)
