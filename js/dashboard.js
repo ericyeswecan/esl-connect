@@ -170,9 +170,13 @@ function showSection(sectionId) {
     // Store current section
     currentSection = sectionId;
 
-    // Scroll to top of content area on mobile
+    // Scroll to the content area on mobile
     if (window.innerWidth <= 968) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        const contentArea = document.querySelector('.dashboard-content');
+        if (contentArea) {
+            const offset = contentArea.offsetTop - 80; // Account for sticky nav
+            window.scrollTo({ top: offset, behavior: 'smooth' });
+        }
     }
 
     // Load section data
