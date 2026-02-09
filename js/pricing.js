@@ -35,8 +35,15 @@ async function subscribe(plan) {
     showLoadingOverlay('Creating checkout session...');
 
     try {
+        // Determine the API base URL
+        // If on GitHub Pages or Localhost, use the absolute Netlify URL for the backend
+        const isNetlify = window.location.hostname.includes('netlify.app');
+        const apiBase = isNetlify ? '' : 'https://spiffy-entremet-3857d8.netlify.app';
+
+        console.log('Using API Base:', apiBase || 'Relative (Netlify)');
+
         // Call backend function to create checkout session
-        const response = await fetch('/.netlify/functions/create-checkout', {
+        const response = await fetch(`${apiBase}/.netlify/functions/create-checkout`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
