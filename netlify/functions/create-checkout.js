@@ -1,4 +1,5 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+// Triggering new deployment to apply environment variable changes
 
 exports.handler = async (event) => {
     // Only allow POST requests
