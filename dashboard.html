@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -25,6 +25,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <!-- Supabase Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         /* Dashboard Layout */
         .dashboard-container {
@@ -389,7 +391,7 @@
         <!-- Sidebar -->
         <aside class="dashboard-sidebar">
             <div class="user-profile-card">
-                <div class="user-avatar" id="userAvatar">?‘¤</div>
+                <div class="user-avatar" id="userAvatar">User</div>
                 <div class="user-name" id="userName">Loading...</div>
                 <div class="user-role" id="userRole">Loading...</div>
                 <button class="btn-edit-profile" onclick="showSection('profile')">Edit Profile</button>
@@ -457,4 +459,18 @@
                 <div class="section-header">
                     <h2 class="section-title">My Profile</h2>
                 </div>
-                <div
+                <!-- Profile content would go here -->
+                <div id="profileDetails">
+                    <p style="color: rgba(255,255,255,0.7);">Profile management coming soon...</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- External Scripts -->
+    <script src="js/supabase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>
