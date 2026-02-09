@@ -424,6 +424,18 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        @media (max-width: 600px) {
+            .avatar-upload-container {
+                flex-direction: column;
+                text-align: center;
+                gap: var(--spacing-md);
+            }
+
+            .dashboard-content {
+                padding: var(--spacing-md);
+            }
+        }
+
         .avatar-preview-wrapper {
             width: 100px;
             height: 100px;

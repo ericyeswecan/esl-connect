@@ -170,6 +170,11 @@ function showSection(sectionId) {
     // Store current section
     currentSection = sectionId;
 
+    // Scroll to top of content area on mobile
+    if (window.innerWidth <= 968) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     // Load section data
     switch (sectionId) {
         case 'savedJobs':
