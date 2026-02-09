@@ -504,9 +504,10 @@
             // Store mock session
             localStorage.setItem('eslconnect_user', JSON.stringify({
                 email: formData.email,
+                name: `${formData.firstName} ${formData.lastName}`,
                 firstName: formData.firstName,
                 lastName: formData.lastName,
-                userType: formData.userType,
+                role: formData.userType,  // Changed from userType to role
                 loggedIn: true,
                 timestamp: new Date().toISOString()
             }));
