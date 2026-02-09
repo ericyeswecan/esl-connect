@@ -37,8 +37,8 @@ exports.handler = async (event) => {
             ],
             customer_email: userEmail,
             client_reference_id: userName,
-            success_url: `${process.env.URL}/payment-success.html?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${process.env.URL}/payment-cancel.html`,
+            success_url: `${process.env.SITE_URL}/payment-success.html?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${process.env.SITE_URL}/payment-cancel.html`,
             metadata: {
                 plan: plan,
                 userName: userName
