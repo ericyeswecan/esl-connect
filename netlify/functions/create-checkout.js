@@ -2,6 +2,19 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 // Triggering new deployment to apply environment variable changes
 
 exports.handler = async (event) => {
+    // Handle CORS preflight (OPTIONS)
+    if (event.httpMethod === 'OPTIONS') {
+        return {
+            statusCode: 200,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS'
+            },
+            body: ''
+        };
+    }
+
     // Only allow POST requests
     if (event.httpMethod !== 'POST') {
         return {
