@@ -19,6 +19,10 @@ exports.handler = async (event) => {
             annual: process.env.STRIPE_PRICE_ANNUAL
         };
 
+        console.log('Checkout request for plan:', plan);
+        console.log('Loaded Monthly Price ID:', prices.monthly);
+        console.log('Loaded Annual Price ID:', prices.annual);
+
         if (!prices[plan]) {
             return {
                 statusCode: 400,
