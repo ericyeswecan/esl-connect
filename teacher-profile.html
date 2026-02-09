@@ -189,7 +189,7 @@
         }
 
         .section-content li::before {
-            content: "‚úì";
+            content: "??;
             position: absolute;
             left: 0;
             color: var(--accent-blue);
@@ -339,9 +339,9 @@
     <div class="breadcrumb">
         <nav class="breadcrumb-nav">
             <a href="index.html" class="breadcrumb-link">Home</a>
-            <span class="breadcrumb-separator">‚Ä∫</span>
+            <span class="breadcrumb-separator">??/span>
             <a href="resumes.html" class="breadcrumb-link">Teachers</a>
-            <span class="breadcrumb-separator">‚Ä∫</span>
+            <span class="breadcrumb-separator">??/span>
             <span class="breadcrumb-current" id="breadcrumbName">Teacher Profile</span>
         </nav>
     </div>
@@ -350,21 +350,21 @@
     <div class="profile-container">
         <!-- Profile Header -->
         <div class="profile-header">
-            <div class="profile-photo-large" id="profilePhoto">üë©‚Äçüè´</div>
+            <div class="profile-photo-large" id="profilePhoto">?ë©?çüè?/div>
             <div class="profile-info">
                 <h1 class="profile-name" id="profileName">Loading...</h1>
                 <div class="profile-headline" id="profileHeadline">Loading...</div>
                 <div class="profile-meta">
                     <div class="meta-item">
-                        <span>üìç</span>
+                        <span>?ìç</span>
                         <span id="profileLocation">Loading...</span>
                     </div>
                     <div class="meta-item">
-                        <span>üíº</span>
+                        <span>?íº</span>
                         <span id="profileExperience">Loading...</span>
                     </div>
                     <div class="meta-item">
-                        <span id="availabilityIcon">‚úì</span>
+                        <span id="availabilityIcon">??/span>
                         <span id="profileAvailability">Loading...</span>
                     </div>
                 </div>
@@ -378,16 +378,16 @@
             <div>
                 <!-- Video Introduction -->
                 <div class="video-container" id="videoSection" style="display: none;">
-                    <div class="section-title">üé• Video Introduction</div>
+                    <div class="section-title">?é• Video Introduction</div>
                     <div class="video-placeholder">
-                        <span>‚ñ∂Ô∏è</span>
+                        <span>?∂Ô∏è</span>
                     </div>
                     <p style="color: rgba(255,255,255,0.7);">Click to play video introduction</p>
                 </div>
 
                 <!-- About -->
                 <div class="profile-section">
-                    <h2 class="section-title">üë§ About</h2>
+                    <h2 class="section-title">?ë§ About</h2>
                     <div class="section-content">
                         <p id="profileBio">Loading...</p>
                     </div>
@@ -395,7 +395,7 @@
 
                 <!-- Skills -->
                 <div class="profile-section">
-                    <h2 class="section-title">‚≠ê Teaching Specialties</h2>
+                    <h2 class="section-title">‚≠?Teaching Specialties</h2>
                     <div class="skills-grid" id="skillsGrid">
                         <span class="skill-badge">Loading...</span>
                     </div>
@@ -403,7 +403,7 @@
 
                 <!-- Experience -->
                 <div class="profile-section">
-                    <h2 class="section-title">üíº Teaching Experience</h2>
+                    <h2 class="section-title">?íº Teaching Experience</h2>
                     <div class="section-content">
                         <p><strong id="experienceYears">0</strong> years of ESL teaching experience in East Asia</p>
                         <p>Specialized in working with diverse student groups and adapting teaching methods to different
@@ -451,109 +451,9 @@
         </div>
     </div>
 
+    <!-- External Scripts -->
     <script src="js/main.js"></script>
-    <script>
-        // Sample teacher data (same as resumes.html)
-        const sampleTeachers = [
-            {
-                id: 1,
-                name: "Sarah Johnson",
-                photo: "üë©‚Äçüè´",
-                headline: "Experienced Elementary ESL Teacher",
-                location: "Currently in Seoul, South Korea",
-                countryPreference: ["South Korea", "Japan"],
-                experience: "5+",
-                experienceYears: 6,
-                certifications: ["TEFL Certification", "TESOL Certification", "BA in Education"],
-                skills: ["Young Learners", "Phonics", "Classroom Management", "Curriculum Development", "Parent Communication"],
-                bio: "Passionate educator with 6 years of experience teaching elementary students in East Asia. I specialize in creating engaging, interactive lessons that make learning English fun and effective for young learners. My approach focuses on building confidence through positive reinforcement and age-appropriate activities.",
-                availability: "Available",
-                hasVideo: true
-            },
-            {
-                id: 2,
-                name: "Michael Chen",
-                photo: "üë®‚Äçüè´",
-                headline: "Business English Specialist",
-                location: "Based in Tokyo, Japan",
-                countryPreference: ["Japan", "South Korea"],
-                experience: "5+",
-                experienceYears: 8,
-                certifications: ["TESOL Certification", "CELTA", "MBA"],
-                skills: ["Business English", "Corporate Training", "TOEIC Prep", "Presentation Skills", "Professional Communication"],
-                bio: "MBA holder with extensive experience training business professionals in English communication. I help corporate clients improve their English for international business, presentations, and negotiations.",
-                availability: "Available",
-                hasVideo: true
-            },
-            // Add more teachers as needed
-        ];
-
-        // Get teacher ID from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const teacherId = parseInt(urlParams.get('id')) || 1;
-
-        // Find the teacher
-        const teacher = sampleTeachers.find(t => t.id === teacherId);
-
-        if (!teacher) {
-            window.location.href = 'resumes.html';
-        } else {
-            // Check if user is logged in
-            const user = JSON.parse(localStorage.getItem('eslconnect_user') || '{}');
-            if (!user.loggedIn) {
-                alert('Please sign in to view teacher profiles');
-                window.location.href = 'login.html';
-            }
-
-            // Populate profile
-            document.getElementById('profilePhoto').textContent = teacher.photo;
-            document.getElementById('profileName').textContent = teacher.name;
-            document.getElementById('profileHeadline').textContent = teacher.headline;
-            document.getElementById('profileLocation').textContent = teacher.location;
-            document.getElementById('profileExperience').textContent = `${teacher.experienceYears} years experience`;
-            document.getElementById('profileAvailability').textContent = teacher.availability;
-            document.getElementById('profileBio').textContent = teacher.bio;
-            document.getElementById('breadcrumbName').textContent = teacher.name;
-
-            // Skills
-            const skillsGrid = document.getElementById('skillsGrid');
-            skillsGrid.innerHTML = teacher.skills.map(skill => `
-                <span class="skill-badge">${skill}</span>
-            `).join('');
-
-            // Experience
-            document.getElementById('experienceYears').textContent = teacher.experienceYears;
-
-            // Sidebar
-            document.getElementById('sidebarExperience').textContent = `${teacher.experienceYears} years`;
-            document.getElementById('sidebarAvailability').textContent = teacher.availability;
-            document.getElementById('sidebarLocations').textContent = teacher.countryPreference.join(', ');
-
-            // Certifications
-            const certList = document.getElementById('certList');
-            certList.innerHTML = teacher.certifications.map(cert => `
-                <div class="cert-item">${cert}</div>
-            `).join('');
-
-            // Video section
-            if (teacher.hasVideo) {
-                document.getElementById('videoSection').style.display = 'block';
-            }
-        }
-
-        // Contact teacher
-        function contactTeacher() {
-            const user = JSON.parse(localStorage.getItem('eslconnect_user') || '{}');
-
-            if (!user.loggedIn) {
-                alert('Please sign in to contact teachers');
-                window.location.href = 'login.html';
-                return;
-            }
-
-            alert('Contact form coming soon! (Demo mode)\n\nIn production, this would open a contact form or messaging system.');
-        }
-    </script>
+    <script src="js/teacher-profile.js"></script>
 </body>
 
 </html>
