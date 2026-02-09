@@ -89,14 +89,20 @@ function setupNavigation(userRole) {
         { id: 'profile', icon: '🏢', label: 'Company Profile' }
     ];
 
-    const navItems = userRole === 'employer' ? employerNav : teacherNav;
+    const adminNav = [
+        { id: 'adminLink', icon: '🛡️', label: 'Admin Panel', url: 'admin.html' },
+        { id: 'profile', icon: '👤', label: 'Profile' }
+    ];
+
+    let navItems = userRole === 'employer' ? employerNav : teacherNav;
+    if (userRole === 'admin') navItems = adminNav;
     const dashboardNav = document.getElementById('dashboardNav');
 
     dashboardNav.innerHTML = navItems.map(item => `
         <li class="nav-item">
-            <a href="#" class="nav-link" 
+            <a href="${item.url || '#'}" class="nav-link" 
                data-section="${item.id}"
-               onclick="showSection('${item.id}'); return false;"
+               onclick="${item.url ? '' : `showSection('${item.id}'); return false;`}"
                aria-label="Navigate to ${item.label}">
                 <span>${item.icon}</span>
                 <span>${item.label}</span>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - ESL Connect</title>
+    <!-- Supabase Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .user-table th,
+        .user-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .user-table th {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+
+        .user-table tr:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .role-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .role-admin {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+            border: 1px solid #ffd700;
+        }
+
+        .role-teacher {
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            border: 1px solid #667eea;
+        }
+
+        .role-employer {
+            background: rgba(72, 187, 120, 0.2);
+            color: #48bb78;
+            border: 1px solid #48bb78;
+        }
+
+        .btn-back {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <div>
+                <a href="dashboard.html" class="btn-back">← Back to Dashboard</a>
+                <h1 style="color: white; margin-top: 10px;">Admin Panel</h1>
+            </div>
+            <div id="stats" style="color: rgba(255, 255, 255, 0.7);">
+                Loading users...
+            </div>
+        </header>
+
+        <table class="user-table">
+            <thead>
+                <tr>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Joined</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="userTableBody">
+                <!-- Users will be populated here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/supabase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        async function loadUsers() {
+            // Check if admin
+            const user = JSON.parse(localStorage.getItem('eslconnect_user') || '{}');
+            if (user.role !== 'admin') {
+                alert('Access denied. Admin only.');
+                window.location.href = 'dashboard.html';
+                return;
+            }
+
+            try {
+                const { data: users, error } = await eslSupabase
+                    .from('profiles')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                const tableBody = document.getElementById('userTableBody');
+                document.getElementById('stats').textContent = `Total Users: ${users.length}`;
+
+                tableBody.innerHTML = users.map(u => `
+                    <tr>
+                        <td style="color: white; font-weight: 500;">${u.full_name || 'N/A'}</td>
+                        <td style="color: rgba(255,255,255,0.7);">${u.email}</td>
+                        <td><span class="role-badge role-${u.role}">${u.role}</span></td>
+                        <td style="color: rgba(255,255,255,0.6);">${new Date(u.created_at).toLocaleDateString()}</td>
+                        <td>
+                            <button onclick="alert('Manage details for ${u.email}')" style="background: none; border: 1px solid rgba(255,255,255,0.3); color: white; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Manage</button>
+                        </td>
+                    </tr>
+                `).join('');
+
+            } catch (err) {
+                console.error('Error loading users:', err);
+                alert('Failed to load users.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadUsers);
+    </script>
+</body>
+
+</html>
