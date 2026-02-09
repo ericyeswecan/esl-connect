@@ -49,7 +49,8 @@ async function subscribe(plan) {
         });
 
         if (!response.ok) {
-            throw new Error('Failed to create checkout session');
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || 'Failed to create checkout session (Status: ' + response.status + ')');
         }
 
         const { sessionId, url } = await response.json();
@@ -68,7 +69,7 @@ async function subscribe(plan) {
     } catch (error) {
         console.error('Error:', error);
         hideLoadingOverlay();
-        alert('Failed to start checkout. Please try again. Error: ' + error.message);
+        alert('Payment Error: ' + error.message);
     }
 }
 
