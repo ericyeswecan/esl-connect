@@ -1,11 +1,15 @@
 // ===================================
-// ESL Connect - Pricing Page
+// ESL Connect - Pricing Page (Stripe Integration)
 // ===================================
 
+// Initialize Stripe (you'll need to replace with your publishable key)
+const STRIPE_PUBLISHABLE_KEY = 'pk_test_YOUR_KEY_HERE'; // Replace this!
+const stripe = window.Stripe ? window.Stripe(STRIPE_PUBLISHABLE_KEY) : null;
+
 // ===================================
-// Subscribe Function
+// Subscribe Function (Stripe Checkout)
 // ===================================
-function subscribe(plan) {
+async function subscribe(plan) {
     // Check if user is logged in
     const user = JSON.parse(localStorage.getItem('eslconnect_user') || '{}');
 
@@ -21,77 +25,57 @@ function subscribe(plan) {
         return;
     }
 
-    // In production, this would redirect to Stripe Checkout
-    // For now, we'll simulate the payment process
+    // Check if Stripe is loaded
+    if (!stripe) {
+        alert('Payment system is loading. Please try again in a moment.');
+        return;
+    }
 
-    const plans = {
-        monthly: {
-            name: 'Professional Monthly',
-            price: 29.99,
-            duration: 30 // days
-        },
-        annual: {
-            name: 'Professional Annual',
-            price: 299,
-            duration: 365 // days
+    // Show loading
+    showLoadingOverlay('Creating checkout session...');
+
+    try {
+        // Call backend function to create checkout session
+        const response = await fetch('/.netlify/functions/create-checkout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                plan: plan,
+                userEmail: user.email,
+                userName: user.name
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to create checkout session');
         }
-    };
 
-    const selectedPlan = plans[plan];
+        const { sessionId, url } = await response.json();
 
-    if (!selectedPlan) {
-        alert('Invalid plan selected');
-        return;
+        // Redirect to Stripe Checkout
+        if (url) {
+            window.location.href = url;
+        } else {
+            // Fallback: use Stripe.js redirect
+            const result = await stripe.redirectToCheckout({ sessionId });
+
+            if (result.error) {
+                throw new Error(result.error.message);
+            }
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        hideLoadingOverlay();
+        alert('Failed to start checkout. Please try again. Error: ' + error.message);
     }
-
-    // Confirm subscription
-    const confirmed = confirm(
-        `Subscribe to ${selectedPlan.name} for $${selectedPlan.price}?\n\n` +
-        `You will get:\n` +
-        `• Unlimited resume access\n` +
-        `• Contact teachers directly\n` +
-        `• Post unlimited jobs\n` +
-        `• Priority support\n\n` +
-        `This is a demo. No actual payment will be processed.`
-    );
-
-    if (!confirmed) {
-        return;
-    }
-
-    // Simulate payment processing
-    showLoadingOverlay();
-
-    setTimeout(() => {
-        // Create subscription
-        const startDate = new Date();
-        const expiryDate = new Date();
-        expiryDate.setDate(expiryDate.getDate() + selectedPlan.duration);
-
-        const subscription = {
-            active: true,
-            plan: plan,
-            planName: selectedPlan.name,
-            startDate: startDate.toISOString(),
-            expiryDate: expiryDate.toISOString(),
-            amount: selectedPlan.price,
-            paymentMethod: 'Demo Card',
-            autoRenew: true
-        };
-
-        // Save subscription to user data
-        user.subscription = subscription;
-        localStorage.setItem('eslconnect_user', JSON.stringify(user));
-
-        // Redirect to success page
-        window.location.href = 'payment-success.html';
-    }, 2000);
 }
 
 // ===================================
 // Show Loading Overlay
 // ===================================
-function showLoadingOverlay() {
+function showLoadingOverlay(message = 'Processing...') {
     const overlay = document.createElement('div');
     overlay.id = 'loadingOverlay';
     overlay.style.cssText = `
@@ -109,7 +93,7 @@ function showLoadingOverlay() {
     `;
 
     overlay.innerHTML = `
-        <div style="color: white; font-size: 1.5rem; margin-bottom: 1rem;">Processing Payment...</div>
+        <div style="color: white; font-size: 1.5rem; margin-bottom: 1rem;">${message}</div>
         <div style="width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite;"></div>
         <style>
             @keyframes spin {
@@ -119,6 +103,16 @@ function showLoadingOverlay() {
     `;
 
     document.body.appendChild(overlay);
+}
+
+// ===================================
+// Hide Loading Overlay
+// ===================================
+function hideLoadingOverlay() {
+    const overlay = document.getElementById('loadingOverlay');
+    if (overlay) {
+        overlay.remove();
+    }
 }
 
 // ===================================
@@ -184,4 +178,9 @@ function showSubscriptionInfo(subscription) {
 // ===================================
 document.addEventListener('DOMContentLoaded', function () {
     checkSubscription();
+
+    // Check if Stripe loaded successfully
+    if (!stripe) {
+        console.error('Stripe.js failed to load. Please check your publishable key.');
+    }
 });

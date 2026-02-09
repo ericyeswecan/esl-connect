@@ -1,13 +1,17 @@
 {
   "name": "esl-connect",
   "version": "1.0.0",
-  "description": "ESL Connect - Premium job board connecting ESL teachers with opportunities worldwide",
+  "description": "ESL Connect - Teaching Jobs Platform",
   "main": "index.html",
   "scripts": {
-    "dev": "npx serve .",
-    "start": "npx serve ."
+    "dev": "netlify dev",
+    "build": "echo 'No build step required'",
+    "deploy": "netlify deploy --prod"
   },
-  "keywords": ["esl", "teaching", "jobs", "education"],
-  "author": "",
-  "license": "MIT"
+  "dependencies": {
+    "stripe": "^14.0.0"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  }
 }
