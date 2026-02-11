@@ -19,10 +19,7 @@ async function subscribe(plan) {
         return;
     }
 
-    if (user.role !== 'employer') {
-        alert('Subscriptions are only available for employers.');
-        return;
-    }
+
 
     // Determine amount based on plan
     const amount = plan === 'monthly' ? 29900 : 299000; // In KRW (approx equivalent for demo)
