@@ -525,7 +525,13 @@
                 });
 
                 if (error) {
-                    alert('Signup failed: ' + error.message);
+                    if (error.message.toLowerCase().includes('already registered')) {
+                        if (confirm('This email is already registered. Would you like to sign in instead?')) {
+                            window.location.href = 'login.html?email=' + encodeURIComponent(formData.email);
+                        }
+                    } else {
+                        alert('Signup failed: ' + error.message);
+                    }
                 } else {
                     alert(`Account created successfully! Welcome, ${formData.firstName}!`);
 
