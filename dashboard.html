@@ -515,22 +515,21 @@
 <body>
     <!-- Navigation -->
     <nav class="nav-header"
-        style="position: sticky; top: 0; background: rgba(30, 0, 75, 0.95); backdrop-filter: blur(10px); z-index: 100; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+        style="position: sticky; top: 0; background: var(--nav-bg); backdrop-filter: blur(10px); z-index: 100; border-bottom: 1px solid var(--card-border);">
         <div class="container"
             style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem;">
             <a href="index.html" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none;">
                 <img src="logo.svg" alt="ESL Connect" style="width: 40px; height: 40px;">
-                <span style="color: white; font-weight: 600; font-size: 1.1rem;">ESL Connect</span>
+                <span style="color: var(--text-primary); font-weight: 600; font-size: 1.1rem;">ESL Connect</span>
             </a>
             <div style="display: flex; gap: 1rem; align-items: center;">
-                <a href="jobs.html"
-                    style="color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.95rem;">Jobs</a>
+                <a href="jobs.html" style="color: var(--nav-text); text-decoration: none; font-size: 0.95rem;">Jobs</a>
                 <a href="resumes.html"
-                    style="color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.95rem;">Teachers</a>
+                    style="color: var(--nav-text); text-decoration: none; font-size: 0.95rem;">Teachers</a>
                 <a href="dashboard.html"
-                    style="color: white; text-decoration: none; font-size: 0.95rem; font-weight: 600;">Dashboard</a>
+                    style="color: var(--text-primary); text-decoration: none; font-size: 0.95rem; font-weight: 600;">Dashboard</a>
                 <button id="theme-toggle"
-                    style="background: none; border: none; font-size: 1.2rem; cursor: pointer; padding: 0.5rem; display: flex; align-items: center; justify-content: center; transition: transform 0.2s ease; margin-left: 0.5rem;"
+                    style="background: none; border: none; font-size: 1.2rem; cursor: pointer; padding: 0.5rem; display: flex; align-items: center; justify-content: center; transition: transform 0.2s ease; margin-left: 0.5rem; color: var(--text-primary);"
                     title="Switch to Light Mode">☀️</button>
             </div>
         </div>

@@ -19,6 +19,9 @@
     --text-secondary: rgba(255, 255, 255, 0.7);
     --text-muted: rgba(255, 255, 255, 0.5);
     --nav-bg: rgba(255, 255, 255, 0.03);
+    --nav-text: rgba(255, 255, 255, 0.9);
+    --nav-hover: #ffffff;
+    --btn-ghost-bg: rgba(255, 255, 255, 0.1);
     --footer-bg: rgba(0, 0, 0, 0.3);
 
     /* Brand Colors */
@@ -63,6 +66,9 @@
     --text-secondary: #636e72;
     --text-muted: #b2bec3;
     --nav-bg: rgba(255, 255, 255, 0.9);
+    --nav-text: #2d3436;
+    --nav-hover: #667eea;
+    --btn-ghost-bg: rgba(102, 126, 234, 0.1);
     --footer-bg: #f1f3f5;
 
     /* Overrides for better contrast in light mode */

@@ -222,11 +222,14 @@
             style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem;">
             <a href="index.html" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none;">
                 <img src="logo.svg" alt="ESL Connect" style="width: 40px; height: 40px;">
-                <span style="color: white; font-weight: 600; font-size: 1.1rem;">ESL Connect</span>
+                <span style="color: var(--text-primary); font-weight: 600; font-size: 1.1rem;">ESL Connect</span>
             </a>
             <div class="nav-buttons" style="display: flex; gap: 1rem;">
+                <button id="theme-toggle"
+                    style="background: none; border: none; font-size: 1.2rem; cursor: pointer; padding: 0.5rem; display: flex; align-items: center; justify-content: center; transition: transform 0.2s ease; margin-right: 0.5rem; color: var(--text-primary);"
+                    title="Switch to Light Mode">☀️</button>
                 <a href="login.html" class="btn"
-                    style="padding: 0.6rem 1.5rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); border-radius: 50px; color: white; text-decoration: none; font-size: 0.95rem;">Sign
+                    style="padding: 0.6rem 1.5rem; background: var(--btn-ghost-bg); border: 1px solid var(--card-border); border-radius: 50px; color: var(--text-primary); text-decoration: none; font-size: 0.95rem;">Sign
                     In</a>
                 <a href="signup.html" class="btn btn-primary"
                     style="padding: 0.6rem 1.5rem; border-radius: 50px; font-size: 0.95rem;">Sign Up</a>
@@ -345,6 +348,7 @@
     <script src="js/supabase-config.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/pricing.js"></script>
+    <script src="js/theme-toggle.js"></script>
 </body>
 
 </html>
