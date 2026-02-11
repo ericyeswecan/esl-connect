@@ -42,8 +42,8 @@ async function subscribe(plan) {
             },
             orderId: orderId,
             orderName: orderName,
-            successUrl: `${window.location.origin}/.netlify/functions/toss-success?userId=${user.id}&plan=${plan}`,
-            failUrl: `${window.location.origin}/.netlify/functions/toss-fail`,
+            successUrl: `${window.location.origin}/api/toss-success?userId=${user.id}&plan=${plan}`,
+            failUrl: `${window.location.origin}/api/toss-fail`,
             customerEmail: user.email,
             customerName: user.name,
             card: {
