@@ -3,7 +3,7 @@
 // ===================================
 
 // Initialize Toss Payments
-const TOSS_CLIENT_KEY = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm'; // User provided Test Client Key
+const TOSS_CLIENT_KEY = 'test_ck_Z61JOxRQVEnNdwogj9EgrW0X9bAq'; // Correct General Payment Client Key
 const tossPayments = TossPayments(TOSS_CLIENT_KEY);
 
 // ===================================
@@ -168,8 +168,10 @@ function showSubscriptionInfo(subscription) {
 document.addEventListener('DOMContentLoaded', function () {
     checkSubscription();
 
-    // Check if Stripe loaded successfully
-    if (!stripe) {
-        console.error('Stripe.js failed to load. Please check your publishable key.');
+    // Check if Toss Payments is ready
+    if (typeof TossPayments === 'undefined') {
+        console.error('Toss Payments SDK failed to load.');
+    } else {
+        console.log('Toss Payments SDK loaded.');
     }
 });
