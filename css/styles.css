@@ -10,10 +10,20 @@
 }
 
 :root {
-    /* Color Palette */
+    /* Theme - Dark (Default) */
+    --bg-color: #0f0c29;
+    --bg-gradient: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --text-muted: rgba(255, 255, 255, 0.5);
+    --nav-bg: rgba(255, 255, 255, 0.03);
+    --footer-bg: rgba(0, 0, 0, 0.3);
+
+    /* Brand Colors */
     --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    --dark-bg: #0f0c29;
     --dark-purple: #1a1535;
     --medium-purple: #2e1f47;
     --light-purple: #b39ddb;
@@ -44,13 +54,30 @@
     --shadow-glow: 0 0 40px rgba(102, 126, 234, 0.3);
 }
 
+.light-mode {
+    --bg-color: #f8f9fa;
+    --bg-gradient: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    --card-bg: rgba(255, 255, 255, 0.8);
+    --card-border: rgba(0, 0, 0, 0.1);
+    --text-primary: #2d3436;
+    --text-secondary: #636e72;
+    --text-muted: #b2bec3;
+    --nav-bg: rgba(255, 255, 255, 0.9);
+    --footer-bg: #f1f3f5;
+
+    /* Overrides for better contrast in light mode */
+    --light-purple: #4834d4;
+    --shadow-glow: 0 0 20px rgba(102, 126, 234, 0.2);
+}
+
 body {
     font-family: var(--font-primary);
-    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    background: var(--bg-gradient);
     background-attachment: fixed;
-    color: #ffffff;
+    color: var(--text-primary);
     line-height: 1.6;
     min-height: 100vh;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 .container {
@@ -65,9 +92,9 @@ body {
 .hero {
     text-align: center;
     padding: var(--spacing-2xl) var(--spacing-md);
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--nav-bg);
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--card-border);
 }
 
 .logo {
@@ -82,7 +109,7 @@ body {
     font-size: clamp(2rem, 5vw, 3.5rem);
     font-weight: 700;
     margin-bottom: var(--spacing-sm);
-    background: linear-gradient(135deg, #ffffff 0%, var(--light-purple) 100%);
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--light-purple) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -101,7 +128,7 @@ body {
     max-width: 800px;
     margin: 0 auto;
     font-size: clamp(0.95rem, 2vw, 1.05rem);
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--text-secondary);
     line-height: 1.7;
     animation: fadeInUp 0.8s ease-out 0.6s both;
 }
@@ -118,7 +145,7 @@ body {
     font-size: clamp(1.75rem, 4vw, 2.5rem);
     font-weight: 700;
     margin-bottom: var(--spacing-sm);
-    background: linear-gradient(135deg, #ffffff 0%, var(--accent-blue) 100%);
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-blue) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -126,7 +153,7 @@ body {
 
 .section-subtitle {
     text-align: center;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-secondary);
     margin-bottom: var(--spacing-xl);
     font-size: clamp(0.95rem, 2vw, 1.1rem);
 }
@@ -142,9 +169,9 @@ body {
 }
 
 .feature-card {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--card-bg);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--card-border);
     border-radius: var(--radius-lg);
     padding: var(--spacing-xl);
     text-align: center;
@@ -186,11 +213,11 @@ body {
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: var(--spacing-sm);
-    color: #ffffff;
+    color: var(--text-primary);
 }
 
 .feature-card p {
-    color: rgba(255, 255, 255, 0.75);
+    color: var(--text-secondary);
     margin-bottom: var(--spacing-lg);
     line-height: 1.6;
 }
@@ -231,7 +258,7 @@ body {
    =================================== */
 .country-section {
     padding: var(--spacing-2xl) 0;
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--nav-bg);
 }
 
 .country-grid {
@@ -242,9 +269,9 @@ body {
 }
 
 .country-card {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--card-bg);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--card-border);
     border-radius: var(--radius-md);
     padding: var(--spacing-xl);
     text-align: center;
@@ -256,7 +283,8 @@ body {
 
 .country-card:hover {
     transform: translateY(-6px);
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--card-bg);
+    opacity: 0.9;
     border-color: rgba(102, 126, 234, 0.4);
     box-shadow: var(--shadow-md);
 }
@@ -271,7 +299,7 @@ body {
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: var(--spacing-xs);
-    color: #ffffff;
+    color: var(--text-primary);
 }
 
 .job-count {
@@ -284,7 +312,7 @@ body {
    =================================== */
 .quick-links {
     padding: var(--spacing-2xl) 0;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--footer-bg);
 }
 
 .links-grid {
@@ -310,14 +338,14 @@ body {
 }
 
 .links-column a {
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-secondary);
     text-decoration: none;
     transition: all 0.2s ease;
     display: inline-block;
 }
 
 .links-column a:hover {
-    color: #ffffff;
+    color: var(--text-primary);
     transform: translateX(4px);
 }
 
@@ -327,8 +355,8 @@ body {
 .footer {
     padding: var(--spacing-xl) 0;
     text-align: center;
-    background: rgba(0, 0, 0, 0.3);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--footer-bg);
+    border-top: 1px solid var(--card-border);
 }
 
 .footer-tagline {
@@ -342,22 +370,22 @@ body {
 }
 
 .footer-links a {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-secondary);
     text-decoration: none;
     transition: color 0.2s ease;
 }
 
 .footer-links a:hover {
-    color: #ffffff;
+    color: var(--text-primary);
 }
 
 .separator {
     margin: 0 var(--spacing-sm);
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--text-muted);
 }
 
 .copyright {
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--text-muted);
     font-size: 0.9rem;
 }
 
