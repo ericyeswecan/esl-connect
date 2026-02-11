@@ -4,14 +4,11 @@
   "description": "ESL Connect - Teaching Jobs Platform",
   "main": "index.html",
   "scripts": {
-    "dev": "netlify dev",
-    "build": "echo 'No build step required'",
-    "deploy": "netlify deploy --prod"
+    "dev": "echo 'Run locally using your preferred server'",
+    "build": "echo 'No build step required'"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0"
   },
-  "devDependencies": {
-    "netlify-cli": "^17.0.0"
-  }
+  "devDependencies": {}
 }
