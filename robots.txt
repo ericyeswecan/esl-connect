@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Specific crawler settings
+User-agent: Yeti
+Allow: /
+
+User-agent: NaverBot
+Allow: /
+
+Sitemap: https://esl-connect.pages.dev/sitemap.xml
