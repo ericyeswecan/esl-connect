@@ -9,6 +9,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <!-- Supabase Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
     <style>
         .success-container {
             min-height: 100vh;
@@ -129,44 +132,68 @@
 
     <script>
         // Display subscription details
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', async function () {
             const user = JSON.parse(localStorage.getItem('eslconnect_user') || '{}');
+            const detailsContainer = document.getElementById('subscriptionDetails');
 
-            if (user.subscription) {
-                const sub = user.subscription;
-                const startDate = new Date(sub.startDate).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
-                const expiryDate = new Date(sub.expiryDate).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
+            detailsContainer.innerHTML = '<div style="text-align: center; padding: 2rem;">Loading details...</div>';
 
-                document.getElementById('subscriptionDetails').innerHTML = `
-                    <div class="detail-row">
-                        <span class="detail-label">Plan</span>
-                        <span class="detail-value">${sub.planName}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Amount</span>
-                        <span class="detail-value">$${sub.amount.toFixed(2)}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Start Date</span>
-                        <span class="detail-value">${startDate}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Next Billing</span>
-                        <span class="detail-value">${expiryDate}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Status</span>
-                        <span class="detail-value" style="color: #4ade80;">Active</span>
-                    </div>
-                `;
+            try {
+                // Fetch latest profile and subscription from Supabase
+                const { data: profile, error: profileError } = await eslSupabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single();
+
+                if (profileError) throw profileError;
+
+                const { data: subscription, error: subError } = await eslSupabase
+                    .from('subscriptions')
+                    .select('*')
+                    .eq('user_id', user.id)
+                    .eq('status', 'active')
+                    .order('current_period_end', { ascending: false })
+                    .limit(1)
+                    .single();
+
+                if (subError && subError.code !== 'PGRST116') throw subError; // Ignore if no sub found
+
+                // Update local storage
+                user.subscription = subscription;
+                localStorage.setItem('eslconnect_user', JSON.stringify(user));
+
+                if (subscription) {
+                    const expiryDate = new Date(subscription.current_period_end).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+
+                    detailsContainer.innerHTML = `
+                        <div class="detail-row">
+                            <span class="detail-label">Plan</span>
+                            <span class="detail-value">${subscription.plan_name.toUpperCase()}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Payment ID</span>
+                            <span class="detail-value">${subscription.toss_order_id || 'N/A'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Status</span>
+                            <span class="detail-value" style="color: #4ade80;">Active</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Next Billing</span>
+                            <span class="detail-value">${expiryDate}</span>
+                        </div>
+                    `;
+                } else {
+                    detailsContainer.innerHTML = '<p style="color: #f5576c;">Subscription details not found. Please contact support if you were charged.</p>';
+                }
+            } catch (err) {
+                console.error('Error fetching subscription:', err);
+                detailsContainer.innerHTML = '<p style="color: #f5576c;">Error loading details. Please check your dashboard.</p>';
             }
         });
     </script>

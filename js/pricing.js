@@ -2,12 +2,12 @@
 // ESL Connect - Pricing Page (Stripe Integration)
 // ===================================
 
-// Initialize Stripe
-const STRIPE_PUBLISHABLE_KEY = 'pk_test_51SykPiB6v5gYlR6rkMlAzeRyVl76RiWx5ksV1A0JccXnIpv0N8FDf7rb8TcB0P9Gq4WvRdPZqGFFtTDgb11bwUHj00yusZlxmO';
-const stripe = window.Stripe ? window.Stripe(STRIPE_PUBLISHABLE_KEY) : null;
+// Initialize Toss Payments
+const TOSS_CLIENT_KEY = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm'; // User provided Test Client Key
+const tossPayments = TossPayments(TOSS_CLIENT_KEY);
 
 // ===================================
-// Subscribe Function (Stripe Checkout)
+// Subscribe Function (Toss Payments)
 // ===================================
 async function subscribe(plan) {
     // Check if user is logged in
@@ -19,65 +19,43 @@ async function subscribe(plan) {
         return;
     }
 
-    // Check if user is an employer
     if (user.role !== 'employer') {
-        alert('Subscriptions are only available for employers. Please sign up as an employer.');
+        alert('Subscriptions are only available for employers.');
         return;
     }
 
-    // Check if Stripe is loaded
-    if (!stripe) {
-        alert('Payment system is loading. Please try again in a moment.');
-        return;
-    }
-
-    // Show loading
-    showLoadingOverlay('Creating checkout session...');
+    // Determine amount based on plan
+    const amount = plan === 'monthly' ? 29900 : 299000; // In KRW (approx equivalent for demo)
+    const orderId = `order_${user.id.slice(0, 8)}_${Date.now()}`;
+    const orderName = plan === 'monthly' ? 'ESL Connect Professional (Monthly)' : 'ESL Connect Annual';
 
     try {
-        // Determine the API base URL
-        // If on GitHub Pages or Localhost, use the absolute Netlify URL for the backend
-        const isNetlify = window.location.hostname.includes('netlify.app');
-        const apiBase = isNetlify ? '' : 'https://spiffy-entremet-3857d8.netlify.app';
-
-        console.log('Using API Base:', apiBase || 'Relative (Netlify)');
-
-        // Call backend function to create checkout session
-        const response = await fetch(`${apiBase}/.netlify/functions/create-checkout`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                plan: plan,
-                userEmail: user.email,
-                userName: user.name,
-                userId: user.id // Pass Supabase UID
-            })
+        const payment = tossPayments.payment({
+            customerKey: user.id, // Unique ID for the customer
         });
 
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error || 'Failed to create checkout session (Status: ' + response.status + ')');
-        }
-
-        const { sessionId, url } = await response.json();
-
-        // Redirect to Stripe Checkout
-        if (url) {
-            window.location.href = url;
-        } else {
-            // Fallback: use Stripe.js redirect
-            const result = await stripe.redirectToCheckout({ sessionId });
-
-            if (result.error) {
-                throw new Error(result.error.message);
-            }
-        }
+        await payment.requestPayment({
+            method: "CARD", // Payment method: Card
+            amount: {
+                currency: "KRW",
+                value: amount,
+            },
+            orderId: orderId,
+            orderName: orderName,
+            successUrl: `${window.location.origin}/.netlify/functions/toss-success?userId=${user.id}&plan=${plan}`,
+            failUrl: `${window.location.origin}/.netlify/functions/toss-fail`,
+            customerEmail: user.email,
+            customerName: user.name,
+            card: {
+                useEscrow: false,
+                flowMode: "DEFAULT",
+                useCardPoint: false,
+                useAppCardOnly: false,
+            },
+        });
     } catch (error) {
-        console.error('Error:', error);
-        hideLoadingOverlay();
-        alert('Payment Error: ' + error.message);
+        console.error('Toss Payment Error:', error);
+        alert('Payment failed to initialize: ' + error.message);
     }
 }
 

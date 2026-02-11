@@ -368,6 +368,14 @@
                     <input type="email" id="email" name="email" required placeholder="your.email@example.com">
                 </div>
 
+                <div id="employerFields" style="display: none;">
+                    <div class="form-group">
+                        <label for="businessRegistrationNumber">Business Registration Number (Optional)</label>
+                        <input type="text" id="businessRegistrationNumber" name="businessRegistrationNumber"
+                            placeholder="123-45-67890">
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" required
@@ -431,12 +439,21 @@
         const userTypeInput = document.getElementById('userType');
         const submitBtn = document.getElementById('submitBtn');
         const termsCheckbox = document.getElementById('terms');
+        const employerFields = document.getElementById('employerFields');
 
         userTypeCards.forEach(card => {
             card.addEventListener('click', function () {
                 userTypeCards.forEach(c => c.classList.remove('selected'));
                 this.classList.add('selected');
                 userTypeInput.value = this.dataset.type;
+
+                // Toggle employer specific fields
+                if (this.dataset.type === 'employer') {
+                    employerFields.style.display = 'block';
+                } else {
+                    employerFields.style.display = 'none';
+                }
+
                 updateSubmitButton();
             });
         });
@@ -503,7 +520,8 @@
             try {
                 const { data, error } = await signUp(formData.email, formData.password, {
                     fullName: `${formData.firstName} ${formData.lastName}`,
-                    role: formData.userType
+                    role: formData.userType,
+                    businessRegistrationNumber: document.getElementById('businessRegistrationNumber').value
                 });
 
                 if (error) {

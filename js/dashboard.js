@@ -476,6 +476,7 @@ async function loadProfile() {
             if (document.getElementById('profileBio')) document.getElementById('profileBio').value = profile.bio || '';
             if (document.getElementById('profilePhone')) document.getElementById('profilePhone').value = profile.phone_number || '';
             if (document.getElementById('profileWebsite')) document.getElementById('profileWebsite').value = profile.company_website || '';
+            if (document.getElementById('profileBizRegNumber')) document.getElementById('profileBizRegNumber').value = profile.business_registration_number || '';
             if (document.getElementById('profileSkills')) document.getElementById('profileSkills').value = (profile.skills || []).join(', ');
             if (document.getElementById('profileExperience')) document.getElementById('profileExperience').value = profile.experience || '';
 
@@ -496,6 +497,15 @@ async function loadProfile() {
                     sidebarAvatar.style.backgroundImage = `url(${profile.avatar_url})`;
                     sidebarAvatar.style.backgroundSize = 'cover';
                     sidebarAvatar.textContent = '';
+                }
+            }
+
+            // Update Business Certificate Status
+            if (profile.business_registration_url) {
+                const bizStatus = document.getElementById('bizCertStatus');
+                if (bizStatus) {
+                    bizStatus.innerHTML = `✓ Certificate Uploaded (<a href="${profile.business_registration_url}" target="_blank" style="color: var(--accent-blue);">View</a>)`;
+                    bizStatus.style.color = '#4ade80';
                 }
             }
 
@@ -530,6 +540,7 @@ async function updateProfile(e) {
         updatedData.experience = document.getElementById('profileExperience').value;
     } else if (currentUser.role === 'employer') {
         updatedData.company_website = document.getElementById('profileWebsite').value;
+        updatedData.business_registration_number = document.getElementById('profileBizRegNumber').value;
     }
 
     try {
@@ -553,6 +564,27 @@ async function updateProfile(e) {
                 .getPublicUrl(filePath);
 
             updatedData.avatar_url = publicUrl;
+        }
+
+        // 2. Handle Business Certificate Upload
+        const bizCertFile = document.getElementById('bizCertInput').files[0];
+        if (bizCertFile) {
+            saveBtn.textContent = 'Uploading certificate...';
+            const fileExt = bizCertFile.name.split('.').pop();
+            const fileName = `biz-cert-${currentUser.id}-${Math.random()}.${fileExt}`;
+            const filePath = `certificates/${fileName}`;
+
+            const { error: uploadError } = await eslSupabase.storage
+                .from('certificates')
+                .upload(filePath, bizCertFile);
+
+            if (uploadError) throw uploadError;
+
+            const { data: { publicUrl } } = eslSupabase.storage
+                .from('certificates')
+                .getPublicUrl(filePath);
+
+            updatedData.business_registration_url = publicUrl;
         }
 
         saveBtn.textContent = 'Saving profile...';

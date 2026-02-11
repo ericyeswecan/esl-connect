@@ -39,7 +39,8 @@ async function signUp(email, password, metadata) {
                         id: data.user.id,
                         email: email,
                         full_name: metadata.fullName,
-                        role: metadata.role
+                        role: metadata.role,
+                        business_registration_number: metadata.businessRegistrationNumber || null
                     }
                 ]);
 
