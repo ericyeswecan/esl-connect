@@ -12,50 +12,125 @@
     <!-- Supabase Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* Form-specific styles */
+        /* Multi-step Form Styles */
         .form-container {
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
             padding: var(--spacing-xl) var(--spacing-md);
         }
 
-        .form-header {
-            text-align: center;
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .form-header h1 {
-            font-size: clamp(1.75rem, 4vw, 2.5rem);
-            margin-bottom: var(--spacing-sm);
-            background: linear-gradient(135deg, #ffffff 0%, var(--accent-blue) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .form-header p {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 1.05rem;
-        }
-
         .resume-form {
             background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: var(--radius-lg);
-            padding: var(--spacing-xl);
+            padding: var(--spacing-2xl);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
         }
 
-        .form-section {
-            margin-bottom: var(--spacing-xl);
+        /* Progress Stepper */
+        .stepper {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-2xl);
+            position: relative;
+        }
+
+        .stepper::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1;
+            transform: translateY(-50%);
+        }
+
+        .progress-bar-container {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1;
+            transform: translateY(-50%);
+        }
+
+        #progressBar {
+            height: 100%;
+            width: 0%;
+            background: var(--primary-gradient);
+            transition: width 0.4s ease;
+        }
+
+        .progress-step {
+            width: 40px;
+            height: 40px;
+            background: #1e004b;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 600;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .progress-step.active {
+            border-color: var(--accent-blue);
+            color: white;
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+        }
+
+        .progress-step::after {
+            content: attr(data-title);
+            position: absolute;
+            top: 45px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .progress-step.active::after {
+            color: white;
+        }
+
+        /* Form Steps */
+        .form-step {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .form-section h2 {
-            font-size: 1.25rem;
-            color: var(--accent-blue);
-            margin-bottom: var(--spacing-md);
-            padding-bottom: var(--spacing-sm);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: var(--spacing-lg);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
         .form-group {
@@ -67,12 +142,6 @@
             margin-bottom: var(--spacing-xs);
             color: rgba(255, 255, 255, 0.9);
             font-weight: 500;
-            font-size: 0.95rem;
-        }
-
-        .required {
-            color: #f5576c;
-            margin-left: 4px;
         }
 
         .form-group input,
@@ -80,41 +149,16 @@
         .form-group textarea {
             width: 100%;
             padding: 1rem;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: var(--radius-sm);
-            color: #ffffff;
-            font-size: 1rem;
-            font-family: var(--font-primary);
+            color: white;
             transition: all 0.3s ease;
         }
 
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
+        .form-group input:focus {
             border-color: var(--accent-blue);
-            background: rgba(255, 255, 255, 0.12);
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-        }
-
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        .form-group select {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            padding-right: 2.5rem;
-        }
-
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .form-row {
@@ -123,79 +167,63 @@
             gap: var(--spacing-md);
         }
 
-        .helper-text {
-            font-size: 0.875rem;
-            color: rgba(255, 255, 255, 0.5);
-            margin-top: var(--spacing-xs);
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: var(--spacing-xl);
+            gap: 1rem;
         }
 
-        .checkbox-group {
+        .btn-prev {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .checkbox-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: var(--spacing-sm);
-            margin-top: var(--spacing-sm);
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
         }
 
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-        }
-
-        .checkbox-item input[type="checkbox"] {
-            width: auto;
-            cursor: pointer;
-        }
-
-        .checkbox-item label {
-            margin: 0;
-            cursor: pointer;
-            font-weight: 400;
-        }
-
-        .file-upload {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .file-upload input[type="file"] {
-            position: absolute;
-            opacity: 0;
-            cursor: pointer;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-        }
-
-        .file-upload-label {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--spacing-sm);
-            padding: 1.5rem;
-            background: rgba(255, 255, 255, 0.08);
-            border: 2px dashed rgba(255, 255, 255, 0.3);
+        .checkbox-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.75rem;
             border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .file-upload-label:hover {
-            background: rgba(255, 255, 255, 0.12);
+        .checkbox-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .checkbox-card input {
+            width: auto;
+        }
+
+        .file-upload-box {
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            padding: 2rem;
+            text-align: center;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-box:hover {
             border-color: var(--accent-blue);
+            background: rgba(255, 255, 255, 0.05);
         }
 
-        .file-name {
-            margin-top: var(--spacing-xs);
-            color: var(--accent-blue);
-            font-size: 0.9rem;
-        }
-
-        /* Video preview styles */
         .video-preview {
-            margin-top: var(--spacing-md);
             display: none;
+            margin-top: 1rem;
         }
 
         .video-preview.active {
@@ -204,78 +232,11 @@
 
         .video-preview video {
             width: 100%;
-            max-width: 500px;
             border-radius: var(--radius-sm);
-            background: #000;
-        }
-
-        .video-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: var(--spacing-sm);
-            padding: var(--spacing-sm);
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: var(--radius-sm);
-        }
-
-        .video-info-text {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
-        }
-
-        .remove-video {
-            background: rgba(245, 87, 108, 0.2);
-            color: #f5576c;
-            border: 1px solid #f5576c;
-            padding: 0.5rem 1rem;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            font-size: 0.875rem;
-            transition: all 0.3s ease;
-        }
-
-        .remove-video:hover {
-            background: rgba(245, 87, 108, 0.3);
-        }
-
-        .form-actions {
-            display: flex;
-            gap: var(--spacing-md);
-            margin-top: var(--spacing-xl);
-        }
-
-        .btn-submit {
-            flex: 1;
-            padding: 1.125rem 2rem;
-            font-size: 1.125rem;
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
         }
 
         @media (max-width: 600px) {
             .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .form-actions {
-                flex-direction: column-reverse;
-            }
-
-            .resume-form {
-                padding: var(--spacing-lg);
-            }
-
-            .checkbox-group {
                 grid-template-columns: 1fr;
             }
         }
@@ -286,374 +247,191 @@
     <div class="form-container">
         <div class="form-header">
             <a href="index.html" style="text-decoration: none;">
-                <img src="logo.svg" alt="ESL Connect Logo" class="logo" style="width: 80px; margin-bottom: 1rem;">
+                <img src="logo.svg" alt="ESL Connect" class="logo" style="width: 60px; margin-bottom: 1rem;">
             </a>
-            <h1>Post Your Resume</h1>
-            <p>Get discovered by top schools across East Asia</p>
+            <h1>Create Your Professional Profile</h1>
+            <p>Complete these 4 steps to start matching with employers</p>
+        </div>
+
+        <div class="stepper">
+            <div class="progress-bar-container">
+                <div id="progressBar"></div>
+            </div>
+            <div class="progress-step active" data-title="Basic Info">1</div>
+            <div class="progress-step" data-title="Education">2</div>
+            <div class="progress-step" data-title="Experience">3</div>
+            <div class="progress-step" data-title="Finalize">4</div>
         </div>
 
         <form class="resume-form" id="resumeForm">
-            <!-- Personal Information -->
-            <div class="form-section">
-                <h2>Personal Information</h2>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="firstName">First Name<span class="required">*</span></label>
-                        <input type="text" id="firstName" name="firstName" required placeholder="John">
+            <!-- Step 1: Basic Info -->
+            <div class="form-step active" data-step="1">
+                <div class="form-section">
+                    <h2><span>👤</span> Basic Information</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>First Name*</label>
+                            <input type="text" name="firstName" required placeholder="John">
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name*</label>
+                            <input type="text" name="lastName" required placeholder="Doe">
+                        </div>
                     </div>
-
                     <div class="form-group">
-                        <label for="lastName">Last Name<span class="required">*</span></label>
-                        <input type="text" id="lastName" name="lastName" required placeholder="Smith">
+                        <label>Email Address*</label>
+                        <input type="email" name="email" required placeholder="john@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number*</label>
+                        <input type="tel" name="phone" required placeholder="+82 10-1234-5678">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nationality*</label>
+                            <input type="text" name="nationality" required placeholder="e.g. American">
+                        </div>
+                        <div class="form-group">
+                            <label>Current Residence*</label>
+                            <input type="text" name="currentLocation" required placeholder="e.g. Seoul, Korea">
+                        </div>
                     </div>
                 </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="email">Email<span class="required">*</span></label>
-                        <input type="email" id="email" name="email" required placeholder="john.smith@email.com">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="phone">Phone Number<span class="required">*</span></label>
-                        <input type="tel" id="phone" name="phone" required placeholder="+1 555 123 4567">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="nationality">Nationality<span class="required">*</span></label>
-                        <input type="text" id="nationality" name="nationality" required placeholder="e.g., American">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="currentLocation">Current Location<span class="required">*</span></label>
-                        <input type="text" id="currentLocation" name="currentLocation" required
-                            placeholder="City, Country">
-                    </div>
+                <div class="btn-group">
+                    <div></div>
+                    <button type="button" class="btn btn-primary btn-next">Next Step →</button>
                 </div>
             </div>
 
-            <!-- Education & Qualifications -->
-            <div class="form-section">
-                <h2>Education & Qualifications</h2>
-
-                <div class="form-group">
-                    <label for="degree">Highest Degree<span class="required">*</span></label>
-                    <select id="degree" name="degree" required>
-                        <option value="">Select degree</option>
-                        <option value="bachelors">Bachelor's Degree</option>
-                        <option value="masters">Master's Degree</option>
-                        <option value="doctorate">Doctorate/PhD</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="major">Major/Field of Study<span class="required">*</span></label>
-                    <input type="text" id="major" name="major" required
-                        placeholder="e.g., English Literature, Education">
-                </div>
-
-                <div class="form-group">
-                    <label>Teaching Certifications</label>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="tefl" name="certifications" value="TEFL">
-                            <label for="tefl">TEFL</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="tesol" name="certifications" value="TESOL">
-                            <label for="tesol">TESOL</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="celta" name="certifications" value="CELTA">
-                            <label for="celta">CELTA</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="delta" name="certifications" value="DELTA">
-                            <label for="delta">DELTA</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="teachingLicense" name="certifications" value="Teaching License">
-                            <label for="teachingLicense">Teaching License</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Teaching Experience -->
-            <div class="form-section">
-                <h2>Teaching Experience</h2>
-
-                <div class="form-group">
-                    <label for="experience">Years of Teaching Experience<span class="required">*</span></label>
-                    <select id="experience" name="experience" required>
-                        <option value="">Select experience</option>
-                        <option value="0-1">Less than 1 year</option>
-                        <option value="1-3">1-3 years</option>
-                        <option value="3-5">3-5 years</option>
-                        <option value="5-10">5-10 years</option>
-                        <option value="10+">10+ years</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="teachingExperience">Teaching Experience Summary<span class="required">*</span></label>
-                    <textarea id="teachingExperience" name="teachingExperience" required
-                        placeholder="Describe your teaching experience, age groups taught, subjects, and teaching methods..."></textarea>
-                    <p class="helper-text">Include specific achievements and teaching specialties</p>
-                </div>
-
-                <div class="form-group">
-                    <label>Age Groups You've Taught</label>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="preschool" name="ageGroups" value="Preschool">
-                            <label for="preschool">Preschool (3-5)</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="elementary" name="ageGroups" value="Elementary">
-                            <label for="elementary">Elementary (6-12)</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="middle" name="ageGroups" value="Middle School">
-                            <label for="middle">Middle School (13-15)</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="high" name="ageGroups" value="High School">
-                            <label for="high">High School (16-18)</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="adult" name="ageGroups" value="Adults">
-                            <label for="adult">Adults (18+)</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Preferences -->
-            <div class="form-section">
-                <h2>Job Preferences</h2>
-
-                <div class="form-group">
-                    <label>Preferred Countries<span class="required">*</span></label>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="korea" name="countries" value="South Korea" required>
-                            <label for="korea">🇰🇷 South Korea</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="japan" name="countries" value="Japan">
-                            <label for="japan">🇯🇵 Japan</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="china" name="countries" value="China">
-                            <label for="china">🇨🇳 China</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="taiwan" name="countries" value="Taiwan">
-                            <label for="taiwan">🇹🇼 Taiwan</label>
-                        </div>
-                    </div>
-                    <p class="helper-text">Select at least one country</p>
-                </div>
-
-                <div class="form-row">
+            <!-- Step 2: Education & Qualifications -->
+            <div class="form-step" data-step="2">
+                <div class="form-section">
+                    <h2><span>🎓</span> Education & Certifications</h2>
                     <div class="form-group">
-                        <label for="availability">Availability<span class="required">*</span></label>
-                        <select id="availability" name="availability" required>
-                            <option value="">Select availability</option>
-                            <option value="immediate">Immediate</option>
-                            <option value="1month">Within 1 month</option>
-                            <option value="2-3months">2-3 months</option>
-                            <option value="3+months">3+ months</option>
+                        <label>Highest Degree*</label>
+                        <select name="degree" required>
+                            <option value="">Select Degree</option>
+                            <option value="Bachelors">Bachelor's Degree</option>
+                            <option value="Masters">Master's Degree</option>
+                            <option value="PhD">Doctorate / PhD</option>
                         </select>
                     </div>
-
                     <div class="form-group">
-                        <label for="salaryExpectation">Salary Expectation (USD/month)</label>
-                        <input type="text" id="salaryExpectation" name="salaryExpectation"
-                            placeholder="e.g., 2000-2500">
+                        <label>Major*</label>
+                        <input type="text" name="major" required placeholder="e.g. Education, English">
                     </div>
+                    <div class="form-group">
+                        <label>Teaching Certifications</label>
+                        <div class="checkbox-grid">
+                            <label class="checkbox-card">
+                                <input type="checkbox" name="certifications" value="TEFL"> TEFL
+                            </label>
+                            <label class="checkbox-card">
+                                <input type="checkbox" name="certifications" value="TESOL"> TESOL
+                            </label>
+                            <label class="checkbox-card">
+                                <input type="checkbox" name="certifications" value="CELTA"> CELTA
+                            </label>
+                            <label class="checkbox-card">
+                                <input type="checkbox" name="certifications" value="DELTA"> DELTA
+                            </label>
+                            <label class="checkbox-card">
+                                <input type="checkbox" name="certifications" value="Teaching License"> State License
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-prev">← Previous</button>
+                    <button type="button" class="btn btn-primary btn-next">Next Step →</button>
                 </div>
             </div>
 
-            <!-- Resume Upload -->
-            <div class="form-section">
-                <h2>Resume/CV</h2>
-
-                <div class="form-group">
-                    <label for="resumeFile">Upload Resume (Optional)</label>
-                    <div class="file-upload">
-                        <input type="file" id="resumeFile" name="resumeFile" accept=".pdf,.doc,.docx">
-                        <div class="file-upload-label">
-                            <span>📄</span>
-                            <span>Click to upload or drag and drop</span>
+            <!-- Step 3: Experience & Preferences -->
+            <div class="form-step" data-step="3">
+                <div class="form-section">
+                    <h2><span>💼</span> Experience & Preferences</h2>
+                    <div class="form-group">
+                        <label>Total Teaching Experience*</label>
+                        <select name="experience" required>
+                            <option value="">Select Years</option>
+                            <option value="0">No experience</option>
+                            <option value="1-2">1-2 years</option>
+                            <option value="3-5">3-5 years</option>
+                            <option value="5+">5+ years</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>About Me (Brief Summary)*</label>
+                        <textarea name="teachingExperience" required
+                            placeholder="Tell employers about your teaching style..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Preferred Countries*</label>
+                        <div class="checkbox-grid">
+                            <label class="checkbox-card">
+                                <input type="checkbox" name="countries" value="South Korea" checked> Korea
+                            </label>
+                            <label class="checkbox-card">
+                                <input type="checkbox" name="countries" value="Japan"> Japan
+                            </label>
+                            <label class="checkbox-card">
+                                <input type="checkbox" name="countries" value="China"> China
+                            </label>
+                            <label class="checkbox-card">
+                                <input type="checkbox" name="countries" value="Taiwan"> Taiwan
+                            </label>
                         </div>
                     </div>
-                    <div class="file-name" id="fileName"></div>
-                    <p class="helper-text">PDF, DOC, or DOCX (Max 5MB)</p>
+                    <div class="form-group">
+                        <label>Expected Monthly Salary (USD)*</label>
+                        <input type="text" name="salaryExpectation" required placeholder="e.g. 2,500">
+                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="videoIntro">Video Introduction (Optional)</label>
-                    <div class="file-upload">
-                        <input type="file" id="videoIntro" name="videoIntro"
-                            accept="video/mp4,video/webm,video/quicktime">
-                        <div class="file-upload-label">
-                            <span>🎥</span>
-                            <span>Click to upload your video introduction</span>
-                        </div>
-                    </div>
-                    <div class="file-name" id="videoFileName"></div>
-                    <p class="helper-text">MP4, WebM, or MOV (Max 50MB, 2-3 minutes recommended)</p>
-
-                    <!-- Video Preview -->
-                    <div class="video-preview" id="videoPreview">
-                        <video id="videoPlayer" controls></video>
-                        <div class="video-info">
-                            <span class="video-info-text" id="videoSize"></span>
-                            <button type="button" class="remove-video" id="removeVideo">Remove Video</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="additionalInfo">Additional Information</label>
-                    <textarea id="additionalInfo" name="additionalInfo"
-                        placeholder="Any additional information you'd like to share about your teaching philosophy, interests, or special skills..."></textarea>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-prev">← Previous</button>
+                    <button type="button" class="btn btn-primary btn-next">Next Step →</button>
                 </div>
             </div>
 
-            <!-- Form Actions -->
-            <div class="form-actions">
-                <a href="index.html" class="btn btn-secondary">Cancel</a>
-                <button type="submit" class="btn btn-primary btn-submit">Submit Resume</button>
+            <!-- Step 4: Finalize & Upload -->
+            <div class="form-step" data-step="4">
+                <div class="form-section">
+                    <h2><span>🚀</span> Finalize & Upload</h2>
+                    <div class="form-group">
+                        <label>Upload Resume (PDF/Docx)*</label>
+                        <div class="file-upload-box" onclick="document.getElementById('resumeFile').click()">
+                            <p id="fileName">Drop your resume here or click to browse</p>
+                            <input type="file" id="resumeFile" name="resumeFile" accept=".pdf,.doc,.docx" required
+                                style="display:none">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Introduction Video (Optional)</label>
+                        <div class="file-upload-box" onclick="document.getElementById('videoIntro').click()">
+                            <p id="videoFileName">Upload a short intro video (Max 50MB)</p>
+                            <input type="file" id="videoIntro" name="videoIntro" accept="video/*" style="display:none">
+                        </div>
+                        <div class="video-preview" id="videoPreview">
+                            <video id="videoPlayer" controls></video>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Additional Information</label>
+                        <textarea name="additionalInfo" placeholder="Any other details?"></textarea>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-prev">← Previous</button>
+                    <button type="submit" class="btn btn-primary btn-submit">Submit Resume</button>
+                </div>
             </div>
         </form>
     </div>
 
-    <script src="js/main.js"></script>
+    <!-- Scripts -->
     <script src="js/supabase-config.js"></script>
-    <script src="js/auth.js"></script>
-    <script>
-        // Resume file upload handler
-        document.getElementById('resumeFile').addEventListener('change', function (e) {
-            const fileName = e.target.files[0]?.name;
-            const fileNameDisplay = document.getElementById('fileName');
-            if (fileName) {
-                fileNameDisplay.textContent = `Selected: ${fileName}`;
-            } else {
-                fileNameDisplay.textContent = '';
-            }
-        });
-
-        // Video upload handler
-        document.getElementById('videoIntro').addEventListener('change', function (e) {
-            const file = e.target.files[0];
-            const videoFileName = document.getElementById('videoFileName');
-            const videoPreview = document.getElementById('videoPreview');
-            const videoPlayer = document.getElementById('videoPlayer');
-            const videoSize = document.getElementById('videoSize');
-
-            if (file) {
-                // Validate file size (50MB max)
-                const maxSize = 50 * 1024 * 1024; // 50MB in bytes
-                if (file.size > maxSize) {
-                    alert('Video file is too large. Please upload a video smaller than 50MB.');
-                    e.target.value = '';
-                    return;
-                }
-
-                // Validate file type
-                const validTypes = ['video/mp4', 'video/webm', 'video/quicktime'];
-                if (!validTypes.includes(file.type)) {
-                    alert('Invalid video format. Please upload MP4, WebM, or MOV files.');
-                    e.target.value = '';
-                    return;
-                }
-
-                // Show file name
-                videoFileName.textContent = `Selected: ${file.name}`;
-
-                // Show video preview
-                const videoURL = URL.createObjectURL(file);
-                videoPlayer.src = videoURL;
-                videoPreview.classList.add('active');
-
-                // Show file size
-                const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
-                videoSize.textContent = `Size: ${sizeMB} MB`;
-            } else {
-                videoFileName.textContent = '';
-                videoPreview.classList.remove('active');
-            }
-        });
-
-        // Remove video handler
-        document.getElementById('removeVideo').addEventListener('click', function () {
-            const videoInput = document.getElementById('videoIntro');
-            const videoFileName = document.getElementById('videoFileName');
-            const videoPreview = document.getElementById('videoPreview');
-            const videoPlayer = document.getElementById('videoPlayer');
-
-            // Clear input
-            videoInput.value = '';
-            videoFileName.textContent = '';
-            videoPreview.classList.remove('active');
-            videoPlayer.src = '';
-        });
-
-        // Form submission handler
-        document.getElementById('resumeForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            // Check if at least one country is selected
-            const countries = document.querySelectorAll('input[name="countries"]:checked');
-            if (countries.length === 0) {
-                alert('Please select at least one preferred country');
-                return;
-            }
-
-            if (validateForm(this)) {
-                // Collect form data
-                const formData = new FormData(this);
-
-                // Collect checkbox values
-                const certifications = Array.from(document.querySelectorAll('input[name="certifications"]:checked'))
-                    .map(cb => cb.value);
-                const ageGroups = Array.from(document.querySelectorAll('input[name="ageGroups"]:checked'))
-                    .map(cb => cb.value);
-                const preferredCountries = Array.from(document.querySelectorAll('input[name="countries"]:checked'))
-                    .map(cb => cb.value);
-
-                const resumeData = {
-                    ...Object.fromEntries(formData.entries()),
-                    certifications,
-                    ageGroups,
-                    preferredCountries
-                };
-
-                console.log('Resume data:', resumeData);
-
-                // Show success message (placeholder)
-                alert('Thank you! Your resume has been submitted successfully. Employers can now view your profile.');
-
-                // In production, send data to server:
-                // fetch('/api/resumes', {
-                //     method: 'POST',
-                //     body: formData
-                // }).then(response => response.json())
-                //   .then(data => { ... });
-
-                // Redirect to home page
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1500);
-            }
-        });
-    </script>
+    <script src="js/post-resume.js"></script>
 </body>
 
 </html>
