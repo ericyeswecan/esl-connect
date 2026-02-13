@@ -2,6 +2,8 @@
 // ESL Connect - Resume Database Page
 // ===================================
 
+// Note: eslSupabase is initialized in js/supabase-config.js
+
 // Sample teacher data
 const sampleTeachers = [
     {
@@ -226,11 +228,11 @@ function isLoggedIn() {
 // Check Active Subscription
 // ===================================
 function hasActiveSubscription(user) {
-    if (!user.subscription || !user.subscription.active) {
+    if (!user.subscription || user.subscription.status !== 'active') {
         return false;
     }
 
-    const expiryDate = new Date(user.subscription.expiryDate);
+    const expiryDate = new Date(user.subscription.current_period_end || user.subscription.expiryDate);
     const today = new Date();
 
     return expiryDate > today;

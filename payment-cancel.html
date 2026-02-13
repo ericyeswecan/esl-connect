@@ -74,10 +74,7 @@
             <div class="cancel-icon">✕</div>
             <h1>Payment Cancelled</h1>
             <p>Your payment was cancelled. No charges have been made to your account.</p>
-            <p style="font-size: 0.95rem; margin-top: var(--spacing-md);">
-                If you experienced any issues or have questions about our pricing, please don't hesitate to contact our
-                support team.
-            </p>
+            <p id="errorMessage" style="color: #ef4444; font-weight: 600; margin-top: 1rem;"></p>
 
             <div class="action-buttons">
                 <a href="pricing.html" class="btn btn-primary">Try Again</a>
@@ -86,6 +83,16 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const error = params.get('error');
+            if (error) {
+                document.getElementById('errorMessage').textContent = `Reason: ${decodeURIComponent(error)}`;
+            }
+        });
+    </script>
 </body>
 
 </html>

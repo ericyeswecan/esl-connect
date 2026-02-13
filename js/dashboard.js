@@ -58,10 +58,16 @@ function initDashboard() {
 
     // Setup user profile
     const userRole = currentUser.role || 'teacher';
-    document.getElementById('userName').textContent = currentUser.name || 'User';
-    document.getElementById('userRole').textContent = userRole.charAt(0).toUpperCase() + userRole.slice(1);
-    document.getElementById('dashboardTitle').textContent = `Welcome back, ${currentUser.name || 'User'}!`;
+    const isVip = currentUser.subscription && currentUser.subscription.status === 'active';
 
+    document.getElementById('userName').innerHTML = currentUser.name + (isVip ? ' <span class="vip-badge">VIP</span>' : '');
+    document.getElementById('userRole').textContent = userRole.charAt(0).toUpperCase() + userRole.slice(1);
+    document.getElementById('dashboardTitle').innerHTML = `Welcome back, ${currentUser.name}! ${isVip ? '<span class="vip-text">👑 Professional</span>' : ''}`;
+
+    if (isVip) {
+        const profileCard = document.querySelector('.user-profile-card');
+        if (profileCard) profileCard.classList.add('vip-card-border');
+    }
     // Update page title
     document.title = `${currentUser.name}'s Dashboard - ESL Connect`;
 

@@ -64,6 +64,20 @@ export async function onRequest(context) {
             }),
         });
 
+        // Also update the profile to set a fast flag for VIP status
+        await fetch(`${env.SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}`, {
+            method: "PATCH",
+            headers: {
+                "apikey": env.SUPABASE_SERVICE_ROLE_KEY,
+                "Authorization": `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                is_vip: true,
+                vip_expiry: expiryDate.toISOString()
+            })
+        });
+
         if (!supabaseResponse.ok) {
             console.error("Supabase Update Failed:", await supabaseResponse.text());
         }

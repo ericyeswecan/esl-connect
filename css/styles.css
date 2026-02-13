@@ -1,4 +1,4 @@
-/* ===================================
+﻿/* ===================================
    ESL Connect - Modern Styles
    =================================== */
 
@@ -492,4 +492,92 @@ a:focus,
 button:focus {
     outline: 2px solid var(--accent-blue);
     outline-offset: 2px;
+}
+/* ===================================
+   VIP & Premium Features
+   =================================== */
+.vip-badge {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #1a1a3a;
+    padding: 0.2rem 0.8rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+.vip-badge::before {
+    content: '👑';
+}
+
+.vip-card-border {
+    border: 2px solid #FFD700 !important;
+    position: relative;
+    overflow: visible !important;
+}
+
+.vip-card-border::after {
+    content: 'VIP PROFESSIONAL';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #FFD700;
+    color: #1a1a3a;
+    font-size: 0.7rem;
+    font-weight: 900;
+    padding: 2px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.vip-text {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+}
+
+/* Blurred state for resumes */
+.teacher-card.blurred {
+    position: relative;
+}
+
+.teacher-card.blurred .card-content {
+    filter: blur(8px);
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.login-prompt {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    text-align: center;
+    width: 80%;
+}
+
+.login-prompt-text {
+    color: #ffffff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.btn-login-prompt {
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }

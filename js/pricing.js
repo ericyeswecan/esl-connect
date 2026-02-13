@@ -3,7 +3,12 @@
 // ===================================
 
 // Initialize Toss Payments
-const TOSS_CLIENT_KEY = 'test_ck_Z61JOxRQVEnNdwogj9EgrW0X9bAq'; // Correct General Payment Client Key
+// Change to your Live Client Key when ready to launch
+const IS_PRODUCTION = window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1');
+const TOSS_CLIENT_KEY = IS_PRODUCTION
+    ? 'YOUR_LIVE_CLIENT_KEY_HERE'
+    : 'test_ck_Z61JOxRQVEnNdwogj9EgrW0X9bAq';
+
 const tossPayments = TossPayments(TOSS_CLIENT_KEY);
 
 // ===================================
@@ -135,24 +140,27 @@ function showSubscriptionInfo(subscription) {
         position: fixed;
         top: 100px;
         right: 20px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        color: #1a1a3a;
         padding: 1.5rem;
         border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        box-shadow: 0 10px 40px rgba(255, 215, 0, 0.4);
         z-index: 1000;
         max-width: 300px;
+        border: 2px solid #ffffff;
     `;
 
     infoBox.innerHTML = `
-        <div style="font-weight: 600; font-size: 1.1rem; margin-bottom: 0.5rem;">✓ Active Subscription</div>
-        <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 1rem;">
-            ${subscription.planName}<br>
+        <div style="font-weight: 800; font-size: 1.2rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">
+            <span>👑</span> VIP Professional
+        </div>
+        <div style="font-size: 0.95rem; font-weight: 600; margin-bottom: 1rem;">
+            Status: Active<br>
             Renews: ${formattedDate}
         </div>
         <button onclick="window.location.href='dashboard.html'" 
-            style="width: 100%; padding: 0.75rem; background: white; color: #667eea; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
-            Manage Subscription
+            style="width: 100%; padding: 0.75rem; background: #1a1a3a; color: #FFD700; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; transition: transform 0.2s;">
+            Manage VIP Benefits
         </button>
     `;
 
