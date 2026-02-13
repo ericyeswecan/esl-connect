@@ -57,23 +57,27 @@
     --shadow-glow: 0 0 40px rgba(102, 126, 234, 0.3);
 }
 
+/* ===================================
+   Themes & Base Styles
+   =================================== */
 .light-mode {
-    --bg-color: #f8f9fa;
-    --bg-gradient: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    --card-bg: rgba(255, 255, 255, 0.8);
+    --bg-color: #ffffff;
+    --bg-gradient: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    --card-bg: #ffffff;
     --card-border: rgba(0, 0, 0, 0.1);
-    --text-primary: #2d3436;
-    --text-secondary: #636e72;
-    --text-muted: #b2bec3;
-    --nav-bg: rgba(255, 255, 255, 0.9);
-    --nav-text: #2d3436;
-    --nav-hover: #667eea;
-    --btn-ghost-bg: rgba(102, 126, 234, 0.1);
-    --footer-bg: #f1f3f5;
+    --text-primary: #1a1a1a;
+    --text-secondary: #4a4a4a;
+    --text-muted: #7a7a7a;
+    --nav-bg: rgba(255, 255, 255, 0.95);
+    --nav-text: #1a1a1a;
+    --nav-hover: #4834d4;
+    --btn-ghost-bg: rgba(72, 52, 212, 0.05);
+    --footer-bg: #f8f9fa;
 
     /* Overrides for better contrast in light mode */
-    --light-purple: #4834d4;
-    --shadow-glow: 0 0 20px rgba(102, 126, 234, 0.2);
+    --light-purple: #2d21a9;
+    --accent-blue: #1e2172;
+    --shadow-glow: 0 4px 20px rgba(72, 52, 212, 0.1);
 }
 
 body {
@@ -83,6 +87,7 @@ body {
     color: var(--text-primary);
     line-height: 1.6;
     min-height: 100vh;
+    padding-top: 80px;
     transition: background 0.3s ease, color 0.3s ease;
 }
 
@@ -93,22 +98,131 @@ body {
 }
 
 /* ===================================
-   Hero Section
+   Navigation Header
    =================================== */
+.nav-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: var(--nav-bg);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    height: 80px;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    z-index: 1001;
+}
+
+.logo-img {
+    width: 40px;
+    height: 40px;
+}
+
+.logo-text {
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: -0.5px;
+}
+
+/* Hamburger Icon */
+.hamburger-icon {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    cursor: pointer;
+    z-index: 1001;
+    padding: 10px;
+}
+
+.hamburger-icon span {
+    display: block;
+    width: 28px;
+    height: 3px;
+    background: var(--text-primary);
+    border-radius: 2px;
+    transition: 0.3s;
+}
+
+/* Nav Menu */
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--accent-blue);
+}
+
+/* Language Switcher */
+.lang-switcher {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-left: 1rem;
+}
+
+.lang-item {
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.lang-item:hover {
+    transform: scale(1.1);
+}
+
+.flag-icon {
+    width: 24px;
+    height: auto;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.lang-name {
+    display: none;
+    /* Hidden on desktop, shown on mobile menu */
+}
+
 .hero {
     text-align: center;
-    padding: var(--spacing-2xl) var(--spacing-md);
+    padding: calc(var(--spacing-xl) + 80px) var(--spacing-md) var(--spacing-xl);
     background: var(--nav-bg);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--card-border);
-}
-
-.logo {
-    width: 120px;
-    max-width: 150px;
-    margin-bottom: var(--spacing-md);
-    filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.4));
-    animation: fadeInDown 0.8s ease-out;
 }
 
 .hero h1 {
@@ -358,11 +472,31 @@ body {
 /* ===================================
    Footer
    =================================== */
-.footer {
+/* ===================================
+   Main Footer (Standardized)
+   =================================== */
+.main-footer {
     padding: var(--spacing-xl) 0;
-    text-align: center;
     background: var(--footer-bg);
     border-top: 1px solid var(--card-border);
+    margin-top: var(--spacing-2xl);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-lg);
+}
+
+.footer-reg-number {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.footer-logo-gemini {
+    height: 24px;
+    opacity: 0.8;
 }
 
 .footer-tagline {
@@ -426,28 +560,70 @@ body {
    Responsive Design
    =================================== */
 @media (max-width: 768px) {
+    .nav-header {
+        height: 70px;
+    }
+
+    .hamburger-icon {
+        display: flex;
+    }
+
+    .nav-menu {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #0f0c29;
+        flex-direction: column;
+        padding: var(--spacing-xl);
+        gap: var(--spacing-xl);
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        z-index: 1000;
+        align-items: flex-start;
+    }
+
+    .nav-menu.active {
+        transform: translateX(0);
+    }
+
+    .nav-links {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .nav-links a {
+        font-size: 1.25rem;
+        padding: var(--spacing-xs) 0;
+        border-bottom: 1px solid var(--card-border);
+        width: 100%;
+    }
+
+    .lang-switcher {
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-top: var(--spacing-md);
+    }
+
+    .lang-item {
+        gap: 0.5rem;
+    }
+
+    .lang-name {
+        display: inline;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+    }
+
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-md);
+    }
+
     .hero {
-        padding: var(--spacing-xl) var(--spacing-md);
-    }
-
-    .featured-grid {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-md);
-    }
-
-    .country-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--spacing-md);
-    }
-
-    .links-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--spacing-lg);
-    }
-
-    .feature-card,
-    .country-card {
-        padding: var(--spacing-lg);
+        padding: calc(var(--spacing-xl) + 70px) var(--spacing-md) var(--spacing-xl);
     }
 }
 
@@ -493,6 +669,7 @@ button:focus {
     outline: 2px solid var(--accent-blue);
     outline-offset: 2px;
 }
+
 /* ===================================
    VIP & Premium Features
    =================================== */
@@ -533,7 +710,7 @@ button:focus {
     padding: 2px 10px;
     border-radius: 4px;
     white-space: nowrap;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .vip-text {
@@ -568,7 +745,7 @@ button:focus {
     color: #ffffff;
     font-weight: 700;
     margin-bottom: 1rem;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .btn-login-prompt {
@@ -579,5 +756,5 @@ button:focus {
     border-radius: var(--radius-full);
     font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }

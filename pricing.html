@@ -43,14 +43,14 @@
         .pricing-header h1 {
             font-size: clamp(2rem, 5vw, 3rem);
             margin-bottom: var(--spacing-sm);
-            background: linear-gradient(135deg, #ffffff 0%, var(--accent-blue) 100%);
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-blue) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .pricing-header p {
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text-secondary);
             font-size: 1.1rem;
             max-width: 600px;
             margin: 0 auto;
@@ -70,9 +70,9 @@
         }
 
         .pricing-card {
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--card-bg);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--card-border);
             border-radius: var(--radius-lg);
             padding: var(--spacing-xl);
             transition: all 0.3s ease;
@@ -105,7 +105,7 @@
         .plan-name {
             font-size: 1.5rem;
             font-weight: 600;
-            color: #ffffff;
+            color: var(--text-primary);
             margin-bottom: var(--spacing-sm);
         }
 
@@ -118,11 +118,11 @@
 
         .plan-price span {
             font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.6);
+            color: var(--text-muted);
         }
 
         .plan-description {
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--text-secondary);
             margin-bottom: var(--spacing-lg);
             font-size: 0.95rem;
         }
@@ -133,7 +133,7 @@
         }
 
         .plan-features li {
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text-secondary);
             padding: var(--spacing-sm) 0;
             display: flex;
             align-items: center;
@@ -166,8 +166,9 @@
         }
 
         .btn-subscribe.secondary {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: var(--btn-ghost-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-primary);
         }
 
         .faq-section {
@@ -180,12 +181,12 @@
             text-align: center;
             font-size: 2rem;
             margin-bottom: var(--spacing-xl);
-            color: #ffffff;
+            color: var(--text-primary);
         }
 
         .faq-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: var(--radius-md);
             padding: var(--spacing-lg);
             margin-bottom: var(--spacing-md);

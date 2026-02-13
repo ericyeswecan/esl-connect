@@ -183,41 +183,52 @@ function renderJobs(jobs) {
     const jobsGrid = document.getElementById('jobsGrid');
     const resultsCount = document.getElementById('resultsCount');
 
-    resultsCount.textContent = `Showing ${jobs.length} job${jobs.length !== 1 ? 's' : ''}`;
+    if (resultsCount) {
+        resultsCount.setAttribute('data-i18n', 'showing_jobs');
+        // Initial text (will be replaced by applyTranslations, but we need the count there)
+        resultsCount.textContent = `Showing ${jobs.length} jobs`;
+    }
 
-    jobsGrid.innerHTML = jobs.map(job => `
-        <div class="job-card" onclick="viewJob(${job.id})">
-            <div class="job-header">
-                <div>
-                    <h3 class="job-title">${job.title}</h3>
-                    <div class="company-name">${job.company}</div>
+    if (jobsGrid) {
+        jobsGrid.innerHTML = jobs.map(job => `
+            <div class="job-card" onclick="viewJob(${job.id})">
+                <div class="job-header">
+                    <div>
+                        <h3 class="job-title">${job.title}</h3>
+                        <div class="company-name">${job.company}</div>
+                    </div>
+                    ${job.badge ? `<span class="job-badge">${job.badge}</span>` : ''}
                 </div>
-                ${job.badge ? `<span class="job-badge">${job.badge}</span>` : ''}
+                
+                <div class="job-details">
+                    <div class="job-detail-item">
+                        <span class="job-detail-icon">📍</span>
+                        <span>${job.location}</span>
+                    </div>
+                    <div class="job-detail-item">
+                        <span class="job-detail-icon">💼</span>
+                        <span>${job.type.charAt(0).toUpperCase() + job.type.slice(1)}</span>
+                    </div>
+                    <div class="job-detail-item">
+                        <span class="job-detail-icon">🕒</span>
+                        <span>Posted ${job.posted}</span>
+                    </div>
+                </div>
+                
+                <p class="job-description">${job.description}</p>
+                
+                <div class="job-footer">
+                    <div class="job-salary">${job.salary}</div>
+                    <button class="btn-apply" onclick="applyJob(event, ${job.id})" data-i18n="apply_now">Apply Now</button>
+                </div>
             </div>
-            
-            <div class="job-details">
-                <div class="job-detail-item">
-                    <span class="job-detail-icon">📍</span>
-                    <span>${job.location}</span>
-                </div>
-                <div class="job-detail-item">
-                    <span class="job-detail-icon">💼</span>
-                    <span>${job.type.charAt(0).toUpperCase() + job.type.slice(1)}</span>
-                </div>
-                <div class="job-detail-item">
-                    <span class="job-detail-icon">🕒</span>
-                    <span>Posted ${job.posted}</span>
-                </div>
-            </div>
-            
-            <p class="job-description">${job.description}</p>
-            
-            <div class="job-footer">
-                <div class="job-salary">${job.salary}</div>
-                <button class="btn-apply" onclick="applyJob(event, ${job.id})">Apply Now</button>
-            </div>
-        </div>
-    `).join('');
+        `).join('');
+    }
+
+    // Apply translations to dynamic elements
+    if (typeof applyTranslations === 'function') {
+        applyTranslations();
+    }
 }
 
 // ===================================

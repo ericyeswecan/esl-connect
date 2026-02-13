@@ -29,14 +29,6 @@
     <link rel="stylesheet" href="css/styles.css">
     <style>
         /* Navigation */
-        .nav-header {
-            position: sticky;
-            top: 0;
-            background: rgba(30, 0, 75, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 100;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
 
         /* Breadcrumb */
         .breadcrumb {
@@ -53,7 +45,7 @@
         }
 
         .breadcrumb-link {
-            color: rgba(255, 255, 255, 0.6);
+            color: var(--text-secondary);
             text-decoration: none;
             font-size: 0.9rem;
             transition: color 0.2s ease;
@@ -64,11 +56,11 @@
         }
 
         .breadcrumb-separator {
-            color: rgba(255, 255, 255, 0.4);
+            color: var(--text-muted);
         }
 
         .breadcrumb-current {
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--text-primary);
             font-size: 0.9rem;
         }
 
@@ -82,7 +74,7 @@
         /* Job Header */
         .job-detail-header {
             background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--card-border);
             border-radius: var(--radius-lg);
             padding: var(--spacing-xl);
             margin-bottom: var(--spacing-xl);
@@ -101,7 +93,7 @@
         .job-title-section h1 {
             font-size: clamp(1.75rem, 4vw, 2.5rem);
             font-weight: 700;
-            color: #ffffff;
+            color: var(--text-primary);
             margin-bottom: var(--spacing-xs);
         }
 
@@ -123,7 +115,7 @@
             display: flex;
             align-items: center;
             gap: var(--spacing-xs);
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text-secondary);
             font-size: 0.95rem;
         }
 
@@ -164,10 +156,10 @@
 
         .btn-save {
             padding: 1rem 2rem;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: var(--radius-full);
-            color: #ffffff;
+            color: var(--text-primary);
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
@@ -178,7 +170,7 @@
         }
 
         .btn-save:hover {
-            background: rgba(255, 255, 255, 0.12);
+            background: var(--card-bg);
             border-color: var(--accent-blue);
         }
 
@@ -190,31 +182,14 @@
 
         .btn-share {
             padding: 1rem;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: var(--radius-full);
-            color: #ffffff;
+            color: var(--text-primary);
             font-size: 1.2rem;
             cursor: pointer;
             transition: all 0.3s ease;
             width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-share:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: var(--accent-blue);
-        }
-
-        /* Job Salary */
-        .job-salary-large {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--light-purple);
-            margin-top: var(--spacing-md);
         }
 
         /* Main Content Grid */
@@ -222,209 +197,104 @@
             display: grid;
             grid-template-columns: 2fr 1fr;
             gap: var(--spacing-xl);
-            margin-bottom: var(--spacing-xl);
-        }
-
-        /* Job Details Section */
-        .job-details-section {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-lg);
         }
 
         .detail-card {
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--card-bg);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--card-border);
             border-radius: var(--radius-lg);
             padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
         }
 
         .detail-card h2 {
             font-size: 1.5rem;
             font-weight: 600;
-            color: #ffffff;
-            margin-bottom: var(--spacing-md);
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-lg);
             display: flex;
             align-items: center;
             gap: var(--spacing-sm);
         }
 
-        .detail-card p {
-            color: rgba(255, 255, 255, 0.8);
+        .detail-card p,
+        .detail-card li {
+            color: var(--text-secondary);
             line-height: 1.8;
             margin-bottom: var(--spacing-md);
         }
 
-        .detail-card ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .detail-card li {
-            color: rgba(255, 255, 255, 0.8);
-            padding: var(--spacing-sm) 0;
-            padding-left: var(--spacing-lg);
-            position: relative;
-            line-height: 1.6;
-        }
-
-        .detail-card li::before {
-            content: "??;
-            position: absolute;
-            left: 0;
-            color: var(--accent-blue);
-            font-weight: 700;
-        }
-
-        /* Job Overview Sidebar */
+        /* Job Overview Card */
         .job-overview-card {
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--card-bg);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--card-border);
             border-radius: var(--radius-lg);
             padding: var(--spacing-xl);
-            height: fit-content;
             position: sticky;
             top: 100px;
         }
 
-        .job-overview-card h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: var(--spacing-lg);
-        }
-
         .overview-item {
-            margin-bottom: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid var(--card-border);
         }
 
         .overview-label {
-            color: rgba(255, 255, 255, 0.6);
+            color: var(--text-muted);
             font-size: 0.85rem;
-            font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: var(--spacing-xs);
+            margin-bottom: 4px;
         }
 
         .overview-value {
-            color: #ffffff;
-            font-size: 1rem;
+            color: var(--text-primary);
             font-weight: 600;
         }
 
-        /* Company Info */
+        /* Company Card */
         .company-info-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: var(--radius-lg);
             padding: var(--spacing-xl);
-            margin-top: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
         }
 
         .company-header {
             display: flex;
-            align-items: center;
             gap: var(--spacing-md);
+            align-items: center;
             margin-bottom: var(--spacing-md);
         }
 
         .company-logo {
             width: 60px;
             height: 60px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-sm);
+            background: var(--primary-gradient);
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 2rem;
+            color: white;
         }
 
         .company-info-text h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: var(--spacing-xs);
+            color: var(--text-primary);
+            margin-bottom: 4px;
         }
 
         .company-link {
             color: var(--accent-blue);
             text-decoration: none;
             font-size: 0.9rem;
-            transition: color 0.2s ease;
         }
 
-        .company-link:hover {
-            color: var(--light-purple);
-        }
-
-        /* Similar Jobs */
-        .similar-jobs-section {
-            margin-top: var(--spacing-2xl);
-        }
-
-        .similar-jobs-section h2 {
-            font-size: 1.75rem;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .similar-jobs-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: var(--spacing-lg);
-        }
-
-        .similar-job-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-lg);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-
-        .similar-job-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
-            border-color: rgba(102, 126, 234, 0.5);
-        }
-
-        .similar-job-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: var(--spacing-xs);
-        }
-
-        .similar-job-company {
-            color: var(--accent-blue);
-            font-size: 0.9rem;
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .similar-job-location {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.85rem;
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .similar-job-salary {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--light-purple);
-            margin-top: var(--spacing-sm);
-        }
-
-        /* Responsive Design */
+        /* Responsive */
         @media (max-width: 968px) {
             .job-content-grid {
                 grid-template-columns: 1fr;
@@ -434,57 +304,7 @@
                 position: static;
             }
         }
-
-        @media (max-width: 768px) {
-            .job-header-top {
-                flex-direction: column;
-            }
-
-            .action-buttons {
-                width: 100%;
-            }
-
-            .btn-apply-large,
-            .btn-save {
-                flex: 1;
-            }
-
-            .similar-jobs-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .job-detail-header {
-                padding: var(--spacing-lg);
-            }
-
-            .detail-card {
-                padding: var(--spacing-lg);
-            }
-        }
-
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: rgba(102, 126, 234, 0.95);
-            color: #ffffff;
-            padding: 1rem 1.5rem;
-            border-radius: var(--radius-sm);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
     </style>
-
-    <!-- Structured Data (JSON-LD) for SEO -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -508,166 +328,95 @@
 </head>
 
 <body>
-    <!-- Navigation -->
+    <!-- Standardized Navigation -->
     <nav class="nav-header">
-        <div class="container"
-            style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem;">
-            <a href="index.html" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none;">
-                <img src="logo.svg" alt="ESL Connect" style="width: 40px; height: 40px;">
-                <span style="color: white; font-weight: 600; font-size: 1.1rem;">ESL Connect</span>
+        <div class="container nav-container">
+            <a href="index.html" class="logo-container">
+                <img src="logo.svg" alt="ESL Connect" class="logo-img">
+                <span class="logo-text">ESL Connect AI Smart Matching</span>
             </a>
-            <div class="nav-buttons" style="display: flex; gap: 1rem;">
-                <a href="login.html" class="btn"
-                    style="padding: 0.6rem 1.5rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); border-radius: 50px; color: white; text-decoration: none; font-size: 0.95rem;">Sign
-                    In</a>
-                <a href="signup.html" class="btn btn-primary"
-                    style="padding: 0.6rem 1.5rem; border-radius: 50px; font-size: 0.95rem;">Sign Up</a>
+            <div class="hamburger-icon" id="hamburger"><span></span><span></span><span></span></div>
+            <div class="nav-menu" id="navMenu">
+                <div class="nav-links">
+                    <a href="pricing.html" data-i18n="pricing">Pricing</a>
+                    <a href="jobs.html" data-i18n="jobs">Jobs</a>
+                    <a href="resumes.html" data-i18n="teachers">Teachers</a>
+                </div>
+                <button id="theme-toggle" class="theme-btn"
+                    style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:var(--text-primary);">‚òÄÔ∏è</button>
+                <div class="lang-switcher">
+                    <div class="lang-item" data-lang="ko">
+                        <img src="https://flagcdn.com/w40/kr.png" class="flag-icon" alt="KO">
+                    </div>
+                    <div class="lang-item" data-lang="en">
+                        <img src="https://flagcdn.com/w40/us.png" class="flag-icon" alt="EN">
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
 
-    <!-- Breadcrumb -->
     <div class="breadcrumb">
         <nav class="breadcrumb-nav">
             <a href="index.html" class="breadcrumb-link">Home</a>
-            <span class="breadcrumb-separator">??/span>
+            <span class="breadcrumb-separator">/</span>
             <a href="jobs.html" class="breadcrumb-link">Jobs</a>
-            <span class="breadcrumb-separator">??/span>
+            <span class="breadcrumb-separator">/</span>
             <span class="breadcrumb-current" id="breadcrumbTitle">Job Details</span>
         </nav>
     </div>
 
-    <!-- Job Detail Container -->
     <div class="job-detail-container">
-        <!-- Job Header -->
         <div class="job-detail-header">
             <div class="job-header-top">
                 <div class="job-title-section">
                     <h1 id="jobTitle">Loading...</h1>
                     <div class="company-name-large" id="companyName">Loading...</div>
                     <div class="job-meta">
-                        <div class="job-meta-item">
-                            <span>?ìç</span>
-                            <span id="jobLocation">Loading...</span>
-                        </div>
-                        <div class="job-meta-item">
-                            <span>?íº</span>
-                            <span id="jobType">Loading...</span>
-                        </div>
-                        <div class="job-meta-item">
-                            <span>?ïí</span>
-                            <span>Posted <span id="jobPosted">Loading...</span></span>
-                        </div>
+                        <div class="job-meta-item">üìç <span id="jobLocation">Loading...</span></div>
+                        <div class="job-meta-item">‚è±Ô∏è <span id="jobType">Loading...</span></div>
+                        <div class="job-meta-item">üìÖ <span>Posted <span id="jobPosted">Loading...</span></span></div>
                     </div>
                 </div>
-                <div id="jobBadgeContainer"></div>
             </div>
-
             <div class="action-buttons">
                 <button class="btn-apply-large" onclick="applyForJob()">Apply Now</button>
                 <button class="btn-save" id="saveBtn" onclick="toggleSaveJob()">
-                    <span id="saveIcon">?îñ</span>
-                    <span id="saveText">Save Job</span>
+                    <span id="saveIcon">üîñ</span> <span id="saveText">Save Job</span>
                 </button>
-                <button class="btn-share" onclick="shareJob()" title="Share this job">?îó</button>
             </div>
-
-            <div class="job-salary-large" id="jobSalary">Loading...</div>
         </div>
 
-        <!-- Main Content Grid -->
         <div class="job-content-grid">
-            <!-- Left Column: Job Details -->
             <div class="job-details-section">
-                <!-- Job Description -->
                 <div class="detail-card">
-                    <h2>?ìÑ Job Description</h2>
+                    <h2>üìù Job Description</h2>
                     <p id="jobDescription">Loading...</p>
                 </div>
-
-                <!-- Requirements -->
                 <div class="detail-card">
-                    <h2>??Requirements</h2>
+                    <h2>‚úÖ Requirements</h2>
                     <ul id="jobRequirements">
                         <li>Loading...</li>
                     </ul>
                 </div>
-
-                <!-- Benefits -->
-                <div class="detail-card" id="benefitsCard">
-                    <h2>?éÅ Benefits & Perks</h2>
-                    <ul id="jobBenefits">
-                        <li>Competitive salary package</li>
-                        <li>Housing allowance or provided accommodation</li>
-                        <li>Flight reimbursement</li>
-                        <li>Health insurance coverage</li>
-                        <li>Paid vacation and holidays</li>
-                        <li>Professional development opportunities</li>
-                    </ul>
-                </div>
-
-                <!-- Company Information -->
-                <div class="company-info-card">
-                    <div class="company-header">
-                        <div class="company-logo">?è¢</div>
-                        <div class="company-info-text">
-                            <h3 id="companyNameInfo">Loading...</h3>
-                            <a href="#" class="company-link" id="companyWebsite">Visit Website ??/a>
-                        </div>
-                    </div>
-                    <p id="companyDescription">
-                        A leading educational institution committed to providing quality English education and
-                        supporting our teaching staff with excellent resources and professional development
-                        opportunities.
-                    </p>
-                </div>
             </div>
-
-            <!-- Right Column: Job Overview -->
-            <div class="job-overview-card">
+            <aside class="job-overview-card">
                 <h3>Job Overview</h3>
                 <div class="overview-item">
-                    <div class="overview-label">Posted Date</div>
-                    <div class="overview-value" id="overviewPosted">Loading...</div>
-                </div>
-                <div class="overview-item">
-                    <div class="overview-label">Experience Level</div>
-                    <div class="overview-value" id="overviewExperience">2+ years</div>
-                </div>
-                <div class="overview-item">
-                    <div class="overview-label">Contract Length</div>
-                    <div class="overview-value" id="overviewContract">1 year (renewable)</div>
-                </div>
-                <div class="overview-item">
-                    <div class="overview-label">Job Type</div>
-                    <div class="overview-value" id="overviewType">Loading...</div>
+                    <div class="overview-label">Location</div>
+                    <div class="overview-value" id="overviewLocation">Loading...</div>
                 </div>
                 <div class="overview-item">
                     <div class="overview-label">Salary</div>
                     <div class="overview-value" id="overviewSalary">Loading...</div>
                 </div>
-                <div class="overview-item">
-                    <div class="overview-label">Location</div>
-                    <div class="overview-value" id="overviewLocation">Loading...</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Similar Jobs -->
-        <div class="similar-jobs-section">
-            <h2>Similar Jobs You Might Like</h2>
-            <div class="similar-jobs-grid" id="similarJobsGrid">
-                <!-- Similar jobs will be populated here -->
-            </div>
+            </aside>
         </div>
     </div>
 
-    <!-- Toast Notification -->
-    <div class="toast" id="toast"></div>
-
-    <!-- External Scripts -->
     <script src="js/main.js"></script>
     <script src="js/job-detail.js"></script>
+    <script src="js/theme-toggle.js"></script>
 </body>
 
 </html>

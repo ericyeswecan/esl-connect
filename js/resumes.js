@@ -246,7 +246,12 @@ function renderTeachers(teachers) {
     const resultsCount = document.getElementById('resultsCount');
     const loggedIn = isLoggedIn();
 
-    resultsCount.textContent = `Showing ${teachers.length} teacher${teachers.length !== 1 ? 's' : ''}`;
+    if (resultsCount) {
+        resultsCount.setAttribute('data-i18n', 'showing_teachers');
+        resultsCount.textContent = `Showing ${teachers.length} teachers`;
+    }
+
+    if (!teachersGrid) return;
 
     if (teachers.length === 0) {
         teachersGrid.innerHTML = `
@@ -262,8 +267,8 @@ function renderTeachers(teachers) {
         <div class="teacher-card ${!loggedIn ? 'blurred' : ''}" onclick="viewTeacher(${teacher.id})">
             ${!loggedIn ? `
                 <div class="login-prompt">
-                    <div class="login-prompt-text">Sign in to view full profiles</div>
-                    <button class="btn-login-prompt" onclick="event.stopPropagation(); window.location.href='login.html'">Sign In</button>
+                    <div class="login-prompt-text" data-i18n="signin_to_view">Sign in to view full profiles</div>
+                    <button class="btn-login-prompt" onclick="event.stopPropagation(); window.location.href='login.html'" data-i18n="signin">Sign In</button>
                 </div>
             ` : ''}
             <div class="card-content">
@@ -294,14 +299,19 @@ function renderTeachers(teachers) {
                     `).join('')}
                 </div>
                 
-                <center>
+                <center style="margin: 10px 0;">
                     <span class="availability-badge">${teacher.availability}</span>
                 </center>
                 
-                <button class="btn-view-profile">View Full Profile</button>
+                <button class="btn-view-profile" data-i18n="view_profile">View Full Profile</button>
             </div>
         </div>
     `).join('');
+
+    // Apply translations to dynamic elements
+    if (typeof applyTranslations === 'function') {
+        applyTranslations();
+    }
 }
 
 // ===================================
