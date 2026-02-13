@@ -5,9 +5,7 @@
 // Initialize Toss Payments
 // Change to your Live Client Key when ready to launch
 const IS_PRODUCTION = window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1');
-const TOSS_CLIENT_KEY = IS_PRODUCTION
-    ? 'live_ck_kYG57Eba3G9ozgwvOXlErpWDOxmA'
-    : 'test_ck_Z61JOxRQVEnNdwogj9EgrW0X9bAq';
+const TOSS_CLIENT_KEY = 'test_ck_Z61JOxRQVEnNdwogj9EgrW0X9bAq';
 
 const tossPayments = TossPayments(TOSS_CLIENT_KEY);
 
